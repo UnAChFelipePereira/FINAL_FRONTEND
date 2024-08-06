@@ -1,0 +1,13 @@
+services:
+  color-admin:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: color-admin-dos-new
+    container_name: color-admin-dos-new
+    ports:
+      - "4200:4200"
+    volumes:
+      - ".:/usr/src"
+      - "/usr/src/node_modules"
+    command: ng serve --poll 2000 --host 0.0.0.0 --port 4200

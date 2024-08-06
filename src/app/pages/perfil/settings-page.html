@@ -1,0 +1,265 @@
+<!-- BEGIN breadcrumb -->
+<ol class="breadcrumb float-xl-end">
+  <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
+  <li class="breadcrumb-item active">Configuración</li>
+</ol>
+<!-- END breadcrumb -->
+<!-- BEGIN page-header -->
+<h1 class="page-header">Configuración de la cuenta</h1>
+<!-- END page-header -->
+<hr class="mb-4" />
+<!-- BEGIN row -->
+
+<div class="row">
+  <!-- BEGIN col-3 -->
+  <div style="width: 230px">
+    <!-- BEGIN #sidebar-bootstrap -->
+    <nav
+      class="navbar navbar-sticky d-none d-xl-block my-n4 py-4 h-100 text-end"
+    >
+      <nav class="nav" id="bsSpyTarget">
+        <a class="nav-link active" href="#general" data-toggle="scroll-to"
+          >General</a
+        >
+        <!-- <a class="nav-link active" href="#mediaAndFiles" data-toggle="scroll-to">Perfil</a> -->
+      </nav>
+    </nav>
+    <!-- END #sidebar-bootstrap -->
+  </div>
+  <!-- END col-3 -->
+  <!-- BEGIN col-9 -->
+  <div class="col-xl-8" id="bsSpyContent">
+    <!-- BEGIN #general -->
+    <div id="general" #section1 class="mb-4 pb-3">
+      <h4 class="d-flex align-items-center mb-2">
+        <span
+          class="iconify fs-24px me-2 text-body text-opacity-75 my-n1"
+          data-icon="solar:user-bold-duotone"
+        ></span>
+        General
+      </h4>
+      <p>Configuración de tu cuenta.</p>
+      <div class="card">
+        <div class="list-group list-group-flush fw-bold">
+          <div class="list-group-item d-flex align-items-center">
+            <div class="flex-fill">
+              <div>Nombre</div>
+              <div class="text-body text-opacity-60">
+                {{userName}} {{userLastName}}
+              </div>
+            </div>
+            <div>
+              <a
+                href="#modalEdit"
+                data-bs-toggle="modal"
+                class="btn btn-secondary disabled w-100px"
+                >Editar</a
+              >
+            </div>
+          </div>
+          <div class="list-group-item d-flex align-items-center">
+            <div class="flex-fill">
+              <div>Correo electronico</div>
+              <div class="text-body text-opacity-60">{{userEmail}}</div>
+            </div>
+            <div>
+              <a
+                href="#modalEdit"
+                data-bs-toggle="modal"
+                class="btn btn-secondary disabled w-100px"
+                >Editar</a
+              >
+            </div>
+          </div>
+          <div class="list-group-item d-flex align-items-center">
+            <div class="flex-fill">
+              <div>Contraseña</div>
+            </div>
+            <div>
+              <a
+                href="#modalEdit"
+                data-bs-toggle="modal"
+                class="btn btn-secondary w-100px"
+                >Editar</a
+              >
+            </div>
+          </div>
+          <div class="list-group list-group-flush fw-bold">
+            <div class="list-group-item d-flex align-items-center">
+              <div class="flex-fill">
+                <div>Cambiar mi foto de perfil</div>
+                <div class="text-body text-opacity-60">.jpg</div>
+              </div>
+              <div>
+                <a
+                  href="#modalEditPicture"
+                  data-bs-toggle="modal"
+                  class="btn btn-secondary w-100px"
+                  >Editar</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END #general -->
+  </div>
+  <!-- END col-9-->
+</div>
+<!-- END row -->
+
+<div class="modal fade" id="modalEdit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form #f="ngForm" (ngSubmit)="formSubmit(f)">
+        <div class="modal-header">
+          <h5 class="modal-title">Cambio de contraseña</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col">
+              <input
+                class="form-control disabled opaque-input"
+                name="email"
+                value="{{userEmail}}"
+                id="email"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"></label>
+            <div class="row">
+              <div class="col">
+                <input
+                  class="form-control"
+                  name="oldPassword"
+                  placeholder="Contraseña actual"
+                  id="oldPassword"
+                  ngModel
+                  required
+                />
+              </div>
+              <div class="col">
+                <input
+                  class="form-control"
+                  name="newPassword"
+                  placeholder="Nueva contraseña"
+                  id="newPassword"
+                  ngModel
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="alert bg-body">
+            <b>Importante:</b> Recuerda que no puedes usar ninguna de tus
+            últimas 3 claves.
+          </div>
+          <div
+            class="alert"
+            role="alert"
+            [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
+          >
+            {{ alertMessage }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+          <button type="submit" class="btn btn-theme">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 
+<div class="modal fade" id="modalEditPicture">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form #f="ngForm" (ngSubmit)="formSubmit(f)">
+			<div class="modal-header">
+				<h5 class="modal-title">Cambiar foto de perfil</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+
+				<div class="mb-3">
+					<label class="form-label"></label>
+					<form (submit)="onSubmit()">
+						<input type="file" (change)="onFileSelected($event)" accept="image/*">
+						<button type="submit">Subir foto de perfil</button>
+					  </form>
+				</div>
+				<div class="alert" role="alert" [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}">
+					{{ alertMessage }}
+				  </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+				<button type="submit" class="btn btn-theme">Guardar</button>
+			</div>
+		</form>
+		</div>
+	</div>
+</div> -->
+<div class="modal fade" id="modalEditPicture">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form #fPhoto="ngForm" (ngSubmit)="submitPhoto(fPhoto)">
+        <!-- <form #f="ngForm" (ngSubmit)="formSubmit(f)"> -->
+        <div class="modal-header">
+          <h5 class="modal-title">Foto de perfil</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="container">
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="fotoperfil" class="form-label">Subir Archivo</label>
+              <input
+                type="file"
+                class="form-control"
+                name="fotoperfil"
+                id="fotoperfil"
+                (change)="onFileChange($event, 'fotoperfil',user_Id )"
+                accept="image/png, image/jpeg"
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="card border-0 mb-4">
+              <div class="alert bg-body">
+                <b>Importante:</b> Solo se admiten archivos JPG como foto de
+                perfil.
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showSuccess" class="alert-custom alert-success">
+            {{ alertMessage }}
+          </div>
+          <div *ngIf="showError" class="alert-custom alert-error">
+            {{ alertMessage }}
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+          <button type="submit" class="btn btn-theme">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

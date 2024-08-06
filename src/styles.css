@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+.opaque-input {
+    opacity: 0.6; /* Opacidad del campo */
+    background-color: #f0f0f0; /* Color de fondo para indicar deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}

@@ -1,0 +1,39 @@
+.card-body {
+    border-radius: 15px;
+}
+
+
+.btn-light-blue {
+    background-color: #155391; /* Azul más claro */
+    color: white;
+    border: none;
+}
+
+.btn-light-blue:hover {
+    background-color: #2a547e; /* Un poco más oscuro para el hover */
+    color: white;
+}
+
+.card {
+    max-height: 200px; /* Mantiene la altura máxima de la tarjeta */
+    width: 100%; /* Asegura que la tarjeta ocupe el ancho completo */
+    background-color: #003a6c;
+    color: white;
+  }
+  
+  .card .p-3 {
+    padding: 1rem !important; /* Ajusta el padding del contenido */
+  }
+  
+  .card .display-6 {
+    font-size: 1.75rem; /* Aumenta el tamaño del título */
+  }
+  
+  .card .fs-6 {
+    font-size: 0.875rem; /* Ajusta el tamaño del texto */
+  }
+  
+  .card img {
+    max-height: 250px; /* Limita la altura máxima de la imagen */
+    width: auto; /* Permite que la imagen se ajuste automáticamente en ancho */
+  }

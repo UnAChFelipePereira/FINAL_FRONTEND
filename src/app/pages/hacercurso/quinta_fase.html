@@ -1,0 +1,253 @@
+<div class="nav-wizards-container fixed-top">
+  <nav class="nav nav-wizards-1 mb-2">
+    <!-- active -->
+    <div class="nav-item col">
+      <a class="nav-link completed">
+        <div class="nav-no">1</div>
+        <div class="nav-text">Primera fase</div>
+      </a>
+    </div>
+
+    <!-- disabled -->
+    <div class="nav-item col">
+      <a class="nav-link completed">
+        <div class="nav-no">2</div>
+        <div class="nav-text">Segunda fase</div>
+      </a>
+    </div>
+
+    <div class="nav-item col">
+      <a class="nav-link completed" href="#">
+        <div class="nav-no">3</div>
+        <div class="nav-text">Tercera fase</div>
+      </a>
+    </div>
+
+    <div class="nav-item col">
+      <a class="nav-link completed" href="#">
+        <div class="nav-no">4</div>
+        <div class="nav-text">Cuarta fase</div>
+      </a>
+    </div>
+
+    <div class="nav-item col">
+      <a class="nav-link active" href="#">
+        <div class="nav-no">5</div>
+        <div class="nav-text">Quinta fase</div>
+      </a>
+    </div>
+  </nav>
+</div>
+
+<div class="container">
+  <h2>{{ curso.nombre_curso }}</h2>
+  <hr />
+  <div class="container">
+    <div class="card mb-3">
+      <div class="card-body p-4">
+        <h4>Instrucciones</h4>
+        <hr />
+        <p>{{ curso.descripcionpt5 }}</p>
+
+        <hr />
+        <h5>Descargar Archivo de la Fase 5</h5>
+        <button class="btn btn-primary" (click)="downloadFile()">
+          Descargar Archivo
+        </button>
+      </div>
+    </div>
+    <div class="card mb-3" *ngIf="curso">
+      <div class="card-body">
+        <p>Pregunta 1: {{ curso.pregunta1pt5 }}</p>
+        <div
+          class="form-check"
+          *ngFor="let respuesta of ['respuesta1p1pt5', 'respuesta2p1pt5', 'respuesta3p1pt5', 'respuesta4p1pt5']"
+        >
+          <input
+            type="radio"
+            class="form-check-input"
+            name="pregunta1"
+            [value]="curso[respuesta]"
+            [(ngModel)]="selectedAnswers['pregunta1']"
+            [disabled]="alreadyCompleted"
+          />
+          <label class="form-check-label">{{ curso[respuesta] }}</label>
+        </div>
+        <div
+          class="alert mt-2"
+          role="alert"
+          *ngIf="answeredQuestions['pregunta1'] !== undefined"
+          [ngClass]="{'alert-danger': !answeredQuestions['pregunta1'], 'alert-success': answeredQuestions['pregunta1']}"
+        >
+          {{ answeredQuestions['pregunta1'] ? 'Respuesta correcta' : 'Respuesta
+          incorrecta. La respuesta correcta es: ' +
+          curso['respuestacorrectap1pt5'] }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Pregunta 2 -->
+    <div class="card mb-3" *ngIf="curso">
+      <div class="card-body">
+        <p>Pregunta 2: {{ curso.pregunta2pt5 }}</p>
+        <div
+          class="form-check"
+          *ngFor="let respuesta of ['respuesta1p2pt5', 'respuesta2p2pt5', 'respuesta3p2pt5', 'respuesta4p2pt5']"
+        >
+          <input
+            type="radio"
+            class="form-check-input"
+            name="pregunta2"
+            [value]="curso[respuesta]"
+            [(ngModel)]="selectedAnswers['pregunta2']"
+            [disabled]="alreadyCompleted"
+          />
+          <label class="form-check-label">{{ curso[respuesta] }}</label>
+        </div>
+        <div
+          class="alert mt-2"
+          role="alert"
+          *ngIf="answeredQuestions['pregunta2'] !== undefined"
+          [ngClass]="{'alert-danger': !answeredQuestions['pregunta2'], 'alert-success': answeredQuestions['pregunta2']}"
+        >
+          {{ answeredQuestions['pregunta2'] ? 'Respuesta correcta' : 'Respuesta
+          incorrecta. La respuesta correcta es: ' +
+          curso['respuestacorrectap2pt5'] }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Pregunta 3 -->
+
+    <div class="card mb-3" *ngIf="curso">
+      <div class="card-body">
+        <p>Pregunta 3: {{ curso.pregunta3pt5 }}</p>
+        <div
+          class="form-check"
+          *ngFor="let respuesta of ['respuesta1p3pt5', 'respuesta2p3pt5', 'respuesta3p3pt5', 'respuesta4p3pt5']"
+        >
+          <input
+            type="radio"
+            class="form-check-input"
+            name="pregunta3"
+            [value]="curso[respuesta]"
+            [(ngModel)]="selectedAnswers['pregunta3']"
+            [disabled]="alreadyCompleted"
+          />
+          <label class="form-check-label">{{ curso[respuesta] }}</label>
+        </div>
+        <div
+          class="alert mt-2"
+          role="alert"
+          *ngIf="answeredQuestions['pregunta3'] !== undefined"
+          [ngClass]="{'alert-danger': !answeredQuestions['pregunta3'], 'alert-success': answeredQuestions['pregunta3']}"
+        >
+          {{ answeredQuestions['pregunta3'] ? 'Respuesta correcta' : 'Respuesta
+          incorrecta. La respuesta correcta es: ' +
+          curso['respuestacorrectap3pt5'] }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Pregunta 4 -->
+
+    <div class="card mb-3" *ngIf="curso">
+      <div class="card-body">
+        <p>Pregunta 4: {{ curso.pregunta4pt5 }}</p>
+        <div
+          class="form-check"
+          *ngFor="let respuesta of ['respuesta1p4pt5', 'respuesta2p4pt5', 'respuesta3p4pt5', 'respuesta4p4pt5']"
+        >
+          <input
+            type="radio"
+            class="form-check-input"
+            name="pregunta4"
+            [value]="curso[respuesta]"
+            [(ngModel)]="selectedAnswers['pregunta4']"
+            [disabled]="alreadyCompleted"
+          />
+          <label class="form-check-label">{{ curso[respuesta] }}</label>
+        </div>
+        <div
+          class="alert mt-2"
+          role="alert"
+          *ngIf="answeredQuestions['pregunta4'] !== undefined"
+          [ngClass]="{'alert-danger': !answeredQuestions['pregunta4'], 'alert-success': answeredQuestions['pregunta4']}"
+        >
+          {{ answeredQuestions['pregunta4'] ? 'Respuesta correcta' : 'Respuesta
+          incorrecta. La respuesta correcta es: ' +
+          curso['respuestacorrectap4pt5'] }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Pregunta 5 -->
+
+    <div class="card mb-3" *ngIf="curso">
+      <div class="card-body">
+        <p>Pregunta 5: {{ curso.pregunta5pt5 }}</p>
+        <div
+          class="form-check"
+          *ngFor="let respuesta of ['respuesta1p5pt5', 'respuesta2p5pt5', 'respuesta3p5pt5', 'respuesta4p5pt5']"
+        >
+          <input
+            type="radio"
+            class="form-check-input"
+            name="pregunta5"
+            [value]="curso[respuesta]"
+            [(ngModel)]="selectedAnswers['pregunta5']"
+            [disabled]="alreadyCompleted"
+          />
+          <label class="form-check-label">{{ curso[respuesta] }}</label>
+        </div>
+        <div
+          class="alert mt-2"
+          role="alert"
+          *ngIf="answeredQuestions['pregunta5'] !== undefined"
+          [ngClass]="{'alert-danger': !answeredQuestions['pregunta5'], 'alert-success': answeredQuestions['pregunta5']}"
+        >
+          {{ answeredQuestions['pregunta5'] ? 'Respuesta correcta' : 'Respuesta
+          incorrecta. La respuesta correcta es: ' +
+          curso['respuestacorrectap5pt5'] }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!alreadyCompleted">
+      <form #f="ngForm" (ngSubmit)="submitAnswers(f)">
+        <!-- Alertas -->
+        <div
+          class="alert mt-3"
+          role="alert"
+          *ngIf="showError || showSuccess"
+          [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
+        >
+          {{ alertMessage }}
+        </div>
+        <!-- Botones de acción -->
+        <div class="d-grid gap-2 mt-3">
+          <button
+            type="submit"
+            class="btn btn-success btn-lg btn-block"
+            [disabled]="formSubmitted"
+          >
+            Enviar respuestas
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Mensaje de fase completada -->
+    <div *ngIf="alreadyCompleted">
+      <div class="d-grid gap-2 mt-3">
+        <button
+          class="btn btn-primary btn-lg btn-block"
+          *ngIf="showNextPhaseButton"
+          (click)="goToNextPhase(cursoId)"
+        >
+          Ver Resultados
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+.table-container {
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    padding: 20px; /* Espaciado interior */
+  }
+  
+  /* Estilos para las celdas de la tabla */
+  .table-container td,
+  .table-container th {
+    padding: 8px; /* Espaciado interno de las celdas */
+  }
+  
+  /* Estilos para los íconos */
+  .table-container i {
+    font-size: 1.2rem; /* Tamaño del ícono */
+    color: #28a745; /* Color verde para respuestas correctas */
+  }
+  
+  .table-container i.fa-times {
+    color: #dc3545; /* Color rojo para respuestas incorrectas */
+  }
+  

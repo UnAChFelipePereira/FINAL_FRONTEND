@@ -1,0 +1,74 @@
+<ul class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
+  <li class="breadcrumb-item active">Buscar Cursos</li>
+</ul>
+
+<h1 class="page-header">Buscar Cursos</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form (submit)="buscarCursos()">
+        <div class="input-group input-group-lg mb-3">
+          <input
+            type="text"
+            class="form-control input-white"
+            placeholder="Ingrese palabras claves aquí.."
+            [(ngModel)]="terminoBusqueda"
+            name="terminoBusqueda"
+          />
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search fa-fw"></i> Buscar
+          </button>
+        </div>
+      </form>
+
+      <div class="result-list">
+        <!-- Alerta de error o éxito -->
+        <div
+          class="position-fixed top-50 start-50 translate-middle"
+          *ngIf="showError || showSuccess"
+        >
+          <div
+            class="alert alert-dismissible fade show"
+            role="alert"
+            [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
+          >
+            {{ alertMessage }}
+            <button type="button" class="btn-close" aria-label="Close" (click)="hideAlerts()"></button>
+          </div>
+        </div>
+
+        <div *ngIf="cursos.length > 0" class="result-list">
+          <div class="result-item" *ngFor="let curso of cursos">
+            <a
+              class="result-image"
+              [style.backgroundImage]="'url(' + curso.iconocursoNombre + ')'"
+              [title]="curso.nombre_curso"
+            ></a>
+            <div class="result-info">
+              <h4 class="title">
+                <a href="javascript:;">{{ curso.nombre_curso }}</a>
+              </h4>
+              <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
+              <p class="desc">{{ curso.descripcion }}</p>
+            </div>
+
+            <div class="result-price">
+              <a
+                href="javascript:;"
+                class="btn btn-yellow d-block w-100"
+                (click)="enrollUserInCurso(curso._id)"
+              >
+                Inscribirme
+              </a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="cursos.length === 0" class="no-results">
+          No se encontraron cursos.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

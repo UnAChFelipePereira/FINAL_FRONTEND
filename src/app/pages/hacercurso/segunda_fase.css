@@ -1,0 +1,9 @@
+@import '~@yaireo/tagify/dist/tagify.css';
+
+.fixed-top {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #DEE2E6;
+    opacity: 1;
+  }

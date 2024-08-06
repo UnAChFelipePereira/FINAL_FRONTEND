@@ -1,0 +1,72 @@
+<!-- BEGIN register -->
+<div class="login login-v2 fw-bold">
+	<!-- BEGIN news-feed -->
+	<div class="news-feed">
+		<div class="news-image" style="background-image: url(/assets/img/subir/campus_unach.jpg)"></div>
+		<div class="news-image-bg"></div>
+		<div class="news-caption">
+			<div class="d-flex align-items-center">
+				<b>AULA</b> VIRTUAL
+			</div>
+		</div>
+	</div>
+	<!-- END news-feed -->
+	
+	<!-- BEGIN register-container -->
+	<div class="register-container">
+		<!-- BEGIN register-header -->
+		<div class="register-header mb-25px h1">
+			<div class="mb-1">REGISTRO</div>
+			<small class="d-block fs-15px lh-16">Crea tu cuenta en <b>AULA</b>VIRTUAL con tu cuenta <span>&#64;</span>alu.unach.cl </small>
+		</div>
+		<!-- END register-header -->
+		
+		<!-- BEGIN register-content -->
+		<div class="register-content">
+			<form #f="ngForm" (ngSubmit)="formSubmit(f)" class="fs-13px">
+				<div class="mb-3">
+					<label class="mb-2">Nombre <span class="text-danger">*</span></label>
+					<div class="row gx-3">
+						<div class="col-md-6 mb-2 mb-md-0">
+							<input type="text" class="form-control fs-13px" placeholder="Nombre" />
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control fs-13px" placeholder="Apellido" />
+						</div>
+					</div>
+				</div>
+				<div class="mb-3">
+					<label class="mb-2">Correo <span class="text-danger">*</span></label>
+					<input type="text" class="form-control fs-13px" placeholder="ejemplo@alu.unach.cl" />
+				</div>
+				<div class="mb-3">
+					<label class="mb-2">Reingresa el correo <span class="text-danger">*</span></label>
+					<input type="text" class="form-control fs-13px" placeholder="ejemplo@alu.unach.cl" />
+				</div>
+				<div class="mb-4">
+					<label class="mb-2">Contraseña <span class="text-danger">*</span></label>
+					<input type="password" class="form-control fs-13px" placeholder="Contraseña" />
+				</div>
+				<div class="form-check mb-4">
+					<input class="form-check-input" type="checkbox" value="" id="agreementCheckbox" />
+					<label class="form-check-label" for="agreementCheckbox">
+						Al hacer clic en registrarme, aceptas nuestros <a href="javascript:;">términos</a> y nuestras <a href="javascript:;">politicas</a>, incluyendo el uso de <a href="javascript:;">Cookies</a>.
+					</label>
+				</div>
+				<div class="mb-4">
+					<button type="submit" class="btn btn-theme d-block w-100 btn-lg h-45px fs-13px">Registrarme</button>
+				</div>
+				<div class="mb-4 pb-5">
+					¿Ya tienes cuenta? Has clic <a routerLink="/login/v2">aquí</a> para iniciar sesión.
+				</div>
+				<hr class="bg-gray-600 opacity-2" />
+				<p class="text-center text-gray-600">
+					&copy; Color Admin All Right Reserved 2023
+				</p>
+			</form>
+		</div>
+		<!-- END register-content -->
+	</div>
+	<!-- END register-container -->
+</div>
+<!-- END register -->

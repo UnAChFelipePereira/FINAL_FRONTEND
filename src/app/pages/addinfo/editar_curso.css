@@ -1,0 +1,73 @@
+@import '~@yaireo/tagify/dist/tagify.css';
+
+/* Ajusta el top para que la barra de navegación quede justo debajo del header */
+.fixed-top {
+    position: sticky;
+    top: 45px;
+    bottom: 0px;
+    width: 100%;
+    z-index: 1000;
+    background-color: #DEE2E6;
+    opacity: 1;
+    padding: 10px 0; /* Ajusta el padding según sea necesario */
+}
+
+.nav-link.active {
+    font-weight: bold; /* Estilo de la sección activa */
+}
+  
+.nav-link.completed {
+    color: rgb(0, 87, 128); /* Estilo de la sección completada */
+}
+
+.form-control[readonly] {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+    cursor: not-allowed;
+  }
+
+
+  .custom-alert {
+    background-color: #FFFFCC; 
+    border: 1px solid #FFD700; 
+    border-radius: 5px; 
+    padding: 15px; 
+    color: #333; 
+    /* font-weight: bold;  */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  */
+    margin-top: 10px; 
+  }
+  
+  .custom-alert b {
+    color: #b57c00; 
+  }
+
+/* Asegúrate de que el contenedor nav-wizards-container no se superponga con el contenido de la página */
+/* body {
+    padding-top: 130px; /* Ajusta este valor según la altura combinada del header y la barra de navegación 
+} */
+
+/* Asegúrate de que el contenedor nav-wizards-container no se superponga con el contenido de la página */
+/* body {
+    padding-top: 130px; /* Ajusta este valor según la altura combinada del header y la barra de navegación 
+} */
+/* @import '~@yaireo/tagify/dist/tagify.css';
+.fixed-top {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #DEE2E6;
+    opacity: 1;
+    padding: 30px 0;
+  }
+  
+
+  .nav-link.active {
+    font-weight: bold; 
+  }
+  
+  .nav-link.completed {
+    color: rgb(0, 87, 128); 
+  }
+
+   */

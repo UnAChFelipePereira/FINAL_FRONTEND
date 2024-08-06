@@ -1,0 +1,59 @@
+<ul class="breadcrumb">
+	<li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
+	<li class="breadcrumb-item active">Progreso estudiantes</li>
+  </ul>
+  
+  <h1 class="page-header">Progreso estudiantes</h1>
+  
+  <div class="row">
+	<div class="col-xl-6" *ngFor="let chartOption of chartOptions; let i = index">
+	  <div id="apexChartColumnChart{{i}}" class="mb-5">
+		<panel title="Panel Success" headerClass="bg-blue-700">
+		  <apx-chart
+			[series]="chartOption.chart.series"
+			[chart]="chartOption.chart.chart"
+			[colors]="chartOption.chart.colors"
+			[legend]="chartOption.chart.legend"
+			[xaxis]="chartOption.chart.xaxis"
+			[yaxis]="chartOption.chart.yaxis"
+			[dataLabels]="chartOption.chart.dataLabels"
+			[grid]="chartOption.chart.grid"
+			[stroke]="chartOption.chart.stroke"
+			[title]="chartOption.chart.title"
+			[plotOptions]="chartOption.chart.plotOptions"
+			[fill]="chartOption.chart.fill"
+			[tooltip]="chartOption.chart.tooltip"
+		  ></apx-chart>
+		</panel>
+		<div class="table-container mt-4">
+		  <table class="table">
+			<thead>
+			  <tr>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Fase</th>
+				<th>Pregunta 1</th>
+				<th>Pregunta 2</th>
+				<th>Pregunta 3</th>
+				<th>Pregunta 4</th>
+				<th>Pregunta 5</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr *ngFor="let data of chartOption.tableData">
+				<td>{{ data.name }}</td>
+				<td>{{ data.lastname }}</td>
+				<td>{{ data.faseId }}</td>
+				<td><i [ngClass]="data.pregunta1 ? 'fa fa-check' : 'fa fa-times'"></i></td>
+				<td><i [ngClass]="data.pregunta2 ? 'fa fa-check' : 'fa fa-times'"></i></td>
+				<td><i [ngClass]="data.pregunta3 ? 'fa fa-check' : 'fa fa-times'"></i></td>
+				<td><i [ngClass]="data.pregunta4 ? 'fa fa-check' : 'fa fa-times'"></i></td>
+				<td><i [ngClass]="data.pregunta5 ? 'fa fa-check' : 'fa fa-times'"></i></td>
+			  </tr>
+			</tbody>
+		  </table>
+		</div>
+	  </div>
+	</div>
+  </div>
+  

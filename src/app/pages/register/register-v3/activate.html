@@ -1,0 +1,11 @@
+<div class="activation-container">
+    <div *ngIf="isLoading" class="alert alert-info" role="alert">
+      Activando tu cuenta, por favor espera...
+    </div>
+    <div *ngIf="showError" class="alert alert-danger" role="alert">
+      {{ activationMessage }}
+    </div>
+    <div *ngIf="isActivated" class="alert alert-success" role="alert">
+      {{ activationMessage }}
+    </div>
+  </div>

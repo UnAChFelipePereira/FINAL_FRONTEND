@@ -2,10 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../components/auth/auth.service";
 import { NgForm } from "@angular/forms";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { Curso } from "../vercursos/curso.model";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
-  selector: "app-hacer-primerafase",
+  selector: "app-hacer-tercerafase",
   templateUrl: "./tercera_fase.html",
   styleUrls: ["./tercera_fase.css"],
 })
@@ -17,7 +19,8 @@ export class HacerTercerafase implements OnInit {
   cursoId: string;
   name: string;
   lastname: string;
-  faseId:"Tercera Fase";
+  email:string;
+  faseId: "Tercera Fase";
   Nombre_Curso: string;
   showError = false;
   showSuccess = false;
@@ -25,24 +28,73 @@ export class HacerTercerafase implements OnInit {
   showNextPhaseButton = false;
   formSubmitted = false;
   alreadyCompleted = false;
+  cursos: Curso[] = [];
+  timestampInicio: string;
+  totalTimeFormatted: string;
+  showConfirmationModal = false;
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
+    private sanitizer: DomSanitizer,
     private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('user_Id');
+    this.userId = localStorage.getItem("user_Id");
+    this.name = localStorage.getItem("userName");
+    this.email = localStorage.getItem("userEmail");
+    this.lastname = localStorage.getItem("userLastName");
     const cursoId = this.route.snapshot.paramMap.get("id");
     const faseId = "Tercera Fase";
+  
     if (cursoId) {
-      localStorage.setItem('curso_Id', cursoId);
+      localStorage.setItem("curso_Id", cursoId);
       this.cursoId = cursoId;
-      this.checkIfCourseCompleted(cursoId, this.userId,faseId);
+  
+      // Verifica si el curso ya ha sido completado
+      this.authService.checkIfCourseCompleted(cursoId, this.userId, faseId).subscribe(
+        (completed) => {
+          this.alreadyCompleted = completed;
+          if (this.alreadyCompleted) {
+            this.showNextPhaseButton = true;
+            // Si el curso ya está completado, deshabilita la selección de respuestas y muestra el botón "Ir a la siguiente fase"
+            this.disableAnswers();
+          } else {
+            // Si el curso no está completado, verifica si ha sido iniciado
+            this.authService.checkIfCourseStarted(cursoId, this.userId, faseId).subscribe(
+              (started) => {
+                if (started.started) {
+                  this.timestampInicio = started.startTime;
+                  this.showConfirmationModal = false;
+                } else {
+                  this.openConfirmationModal();
+                }
+              },
+              (error) => {
+                console.error("Error al verificar si el curso ya fue iniciado:", error);
+              }
+            );
+          }
+        },
+        (error) => {
+          console.error("Error al verificar si el curso está completado:", error);
+        }
+      );
+  
       this.getCursoDetalles(cursoId);
+      this.loadAllData(cursoId);
     }
+  }
+
+  disableAnswers() {
+
+    this.formSubmitted = true;
+  }
+
+  checkIfCourseStarted(cursoId: string, userId: string, faseId: string) {
+    return this.authService.checkIfCourseStarted(cursoId, userId, faseId);
   }
 
   checkIfCourseCompleted(cursoId: string, userId: string, faseId: string) {
@@ -51,6 +103,9 @@ export class HacerTercerafase implements OnInit {
         this.alreadyCompleted = completed;
         if (this.alreadyCompleted) {
           this.showNextPhaseButton = true;
+          this.formSubmitted = true;
+        } else {
+          this.openConfirmationModal(); 
         }
       },
       (error) => {
@@ -70,6 +125,25 @@ export class HacerTercerafase implements OnInit {
     );
   }
 
+  loadAllData(cursoId: string): void {
+    this.authService.getCursoById(cursoId).subscribe(
+      (curso) => {
+        const archivo = `http://localhost:3000/uploads/${encodeURIComponent(
+          curso.archivo_pt3Nombre
+        )}`;
+        this.cursos = [
+          {
+            ...curso,
+            archivo_pt3: archivo,
+          },
+        ];
+      },
+      (error) => {
+        console.error("Error al obtener curso por ID:", error);
+      }
+    );
+  }
+
   selectAnswer(
     pregunta: string,
     selectedAnswer: string,
@@ -81,53 +155,56 @@ export class HacerTercerafase implements OnInit {
   }
 
   submitAnswers(f: NgForm) {
-    if (!this.areAllQuestionsAnswered()) {
-      this.showErrorAlert("Por favor responde todas las preguntas antes de enviar.");
+    if (this.alreadyCompleted) {
+      this.showErrorAlert(
+        "El curso ya ha sido completado. No puedes enviar respuestas nuevamente."
+      );
       return;
     }
 
-    this.cursoId = localStorage.getItem('curso_Id');
-    this.userId = localStorage.getItem('user_Id');
-    this.name = localStorage.getItem('userName');
-    this.lastname = localStorage.getItem('userLastName');
-    this.faseId = "Tercera Fase";
-    this.Nombre_Curso = this.curso.nombre_curso;
-
-    // Comparar las respuestas seleccionadas con las correctas
-    this.answeredQuestions['pregunta1'] = this.selectedAnswers['pregunta1'] === this.curso['respuestacorrectap1pt3'];
-    this.answeredQuestions['pregunta2'] = this.selectedAnswers['pregunta2'] === this.curso['respuestacorrectap2pt3'];
-    this.answeredQuestions['pregunta3'] = this.selectedAnswers['pregunta3'] === this.curso['respuestacorrectap3pt3'];
-    this.answeredQuestions['pregunta4'] = this.selectedAnswers['pregunta4'] === this.curso['respuestacorrectap4pt3'];
-    this.answeredQuestions['pregunta5'] = this.selectedAnswers['pregunta5'] === this.curso['respuestacorrectap5pt3'];
-
-    const formData = f.value;
-
-    if (f.valid) {
-      this.authService.crearprimerafase(
-        this.userId,
-        this.name,
-        this.lastname,
-        this.cursoId,
-        this.Nombre_Curso,
-        this.answeredQuestions['pregunta1'],
-        this.answeredQuestions['pregunta2'],
-        this.answeredQuestions['pregunta3'],
-        this.answeredQuestions['pregunta4'],
-        this.answeredQuestions['pregunta5'],
-        this.faseId,
-      ).subscribe(
-        response => {
-          this.showSuccessAlert('Respuestas enviadas exitosamente!');
-          this.formSubmitted = true;
-          this.showNextPhaseButton = true;
-          this.alreadyCompleted = true;
-          // Opcional: aquí podrías actualizar el estado de las preguntas y respuestas para mantenerlas visibles
-        },
-        error => {
-          this.showErrorAlert('Hubo un error al enviar las respuestas.');
-        }
+    if (!this.areAllQuestionsAnswered()) {
+      this.showErrorAlert(
+        "Por favor responde todas las preguntas antes de enviar."
       );
+      return;
     }
+
+    const data = {
+      userId: this.userId,
+      cursoId: this.cursoId,
+      faseId: "Tercera Fase",
+
+      pregunta1: (this.answeredQuestions["pregunta1"] =
+        this.selectedAnswers["pregunta1"] ===
+        this.curso["respuestacorrectap1pt3"]),
+      pregunta2: (this.answeredQuestions["pregunta2"] =
+        this.selectedAnswers["pregunta2"] ===
+        this.curso["respuestacorrectap2pt3"]),
+      pregunta3: (this.answeredQuestions["pregunta3"] =
+        this.selectedAnswers["pregunta3"] ===
+        this.curso["respuestacorrectap3pt3"]),
+      pregunta4: (this.answeredQuestions["pregunta4"] =
+        this.selectedAnswers["pregunta4"] ===
+        this.curso["respuestacorrectap4pt3"]),
+      pregunta5: (this.answeredQuestions["pregunta5"] =
+        this.selectedAnswers["pregunta5"] ===
+        this.curso["respuestacorrectap5pt3"]),
+
+      endTime: new Date(),
+    };
+
+    this.authService.endCourse(data).subscribe(
+      (response) => {
+        this.showSuccessAlert("Respuestas enviadas exitosamente!");
+        this.formSubmitted = true;
+        this.showNextPhaseButton = true;
+        this.alreadyCompleted = true; // Bloquea el formulario
+      },
+      (error) => {
+        this.showErrorAlert("Hubo un error al enviar las respuestas.");
+        console.error("Error al enviar respuestas:", error);
+      }
+    );
   }
 
   areAllQuestionsAnswered(): boolean {
@@ -135,7 +212,7 @@ export class HacerTercerafase implements OnInit {
   }
 
   goToNextPhase(cursoId: string) {
-    this.router.navigate(['/cuarta_fase', cursoId]);
+    this.router.navigate(["/cuarta_fase", cursoId]);
   }
 
   showSuccessAlert(message: string) {
@@ -161,32 +238,78 @@ export class HacerTercerafase implements OnInit {
   }
 
   downloadFile() {
-    const url = `http://localhost:3000/uploads/${encodeURIComponent(this.curso.archivo_pt3Nombre)}`;
-    
-    // Realizar la solicitud HTTP para obtener el archivo como un blob
-    this.http.get(url, { responseType: 'blob' }).subscribe((blob: Blob) => {
-      // Crear un objeto URL del blob
-      const blobUrl = window.URL.createObjectURL(blob);
-      
-      // Crear un enlace temporal en el documento
-      const anchor = document.createElement('a');
-      anchor.style.display = 'none';
-      anchor.href = blobUrl;
-      anchor.download = this.curso.archivo_pt3Nombre;
+    const url = `http://localhost:3000/uploads/${encodeURIComponent(
+      this.curso.archivo_pt3Nombre
+    )}`;
 
-      // Agregar el enlace al cuerpo del documento
-      document.body.appendChild(anchor);
+    this.http.get(url, { responseType: "blob" }).subscribe(
+      (blob: Blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
 
-      // Simular clic en el enlace para iniciar la descarga
-      anchor.click();
+        const anchor = document.createElement("a");
+        anchor.style.display = "none";
+        anchor.href = blobUrl;
+        anchor.download = this.curso.archivo_pt3Nombre;
 
-      // Eliminar el enlace del cuerpo del documento
-      document.body.removeChild(anchor);
+        document.body.appendChild(anchor);
 
-      // Liberar el objeto URL del blob
-      window.URL.revokeObjectURL(blobUrl);
-    }, error => {
-      console.error('Error al descargar el archivo:', error);
-    });
-  } 
+        anchor.click();
+
+        document.body.removeChild(anchor);
+
+        window.URL.revokeObjectURL(blobUrl);
+      },
+      (error) => {
+        console.error("Error al descargar el archivo:", error);
+      }
+    );
+  }
+
+  openConfirmationModal() {
+    this.showConfirmationModal = true;
+  }
+
+  closeConfirmationModal(redirect: boolean = true) {
+    if (redirect) {
+      this.router.navigate(["/mis-cursos"]);
+    } else {
+      this.showConfirmationModal = false;
+    }
+  }
+
+  startCourse() {
+    const data = {
+      userId: this.userId,
+      name: this.name,
+      lastname: this.lastname,
+      email: this.email,
+      cursoId: this.cursoId,
+      Nombre_Curso: this.curso.nombre_curso,
+      faseId: "Tercera Fase",
+      startTime: new Date(),
+    };
+
+    this.authService.startCourse(data).subscribe(
+      (response) => {
+        this.closeConfirmationModal(false);
+        this.timestampInicio = data.startTime.toISOString();
+      },
+      (error) => {
+        this.showErrorAlert("Error al iniciar el curso.");
+        console.error("Error al iniciar el curso:", error);
+      }
+    );
+  }
+
+  formatTotalTime(totalTime: number): string {
+    const hours = Math.floor(totalTime / 3600);
+    const minutes = Math.floor((totalTime % 3600) / 60);
+    const seconds = Math.floor(totalTime % 60);
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  showTotalTime(totalTime: number) {
+    this.totalTimeFormatted = this.formatTotalTime(totalTime);
+  }
 }

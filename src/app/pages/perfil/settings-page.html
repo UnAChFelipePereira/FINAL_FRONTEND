@@ -21,7 +21,6 @@
         <a class="nav-link active" href="#general" data-toggle="scroll-to"
           >General</a
         >
-        <!-- <a class="nav-link active" href="#mediaAndFiles" data-toggle="scroll-to">Perfil</a> -->
       </nav>
     </nav>
     <!-- END #sidebar-bootstrap -->
@@ -180,41 +179,10 @@
     </div>
   </div>
 </div>
-<!-- 
-<div class="modal fade" id="modalEditPicture">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form #f="ngForm" (ngSubmit)="formSubmit(f)">
-			<div class="modal-header">
-				<h5 class="modal-title">Cambiar foto de perfil</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-			</div>
-			<div class="modal-body">
-
-				<div class="mb-3">
-					<label class="form-label"></label>
-					<form (submit)="onSubmit()">
-						<input type="file" (change)="onFileSelected($event)" accept="image/*">
-						<button type="submit">Subir foto de perfil</button>
-					  </form>
-				</div>
-				<div class="alert" role="alert" [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}">
-					{{ alertMessage }}
-				  </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
-				<button type="submit" class="btn btn-theme">Guardar</button>
-			</div>
-		</form>
-		</div>
-	</div>
-</div> -->
 <div class="modal fade" id="modalEditPicture">
   <div class="modal-dialog">
     <div class="modal-content">
       <form #fPhoto="ngForm" (ngSubmit)="submitPhoto(fPhoto)">
-        <!-- <form #f="ngForm" (ngSubmit)="formSubmit(f)"> -->
         <div class="modal-header">
           <h5 class="modal-title">Foto de perfil</h5>
           <button

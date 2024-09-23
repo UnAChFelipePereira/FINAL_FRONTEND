@@ -122,6 +122,19 @@
                         id="nombre_profesor"
                         placeholder="Ej: Profesor Juan Perez"
                         [(ngModel)]="cursoData.nombre_profesor"
+                        [disabled]="!isProfesorEditable"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3" *ngIf="userRol === 'admin'">
+                      <label class="form-label">Correo del Profesor</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        name="profesorEmail"
+                        id="profesorEmail"
+                        placeholder="Ej: Profesor@unach.cl"
+                        [(ngModel)]="cursoData.profesorEmail"
                         required
                       />
                     </div>
@@ -137,13 +150,28 @@
                         required
                       ></textarea>
                     </div>
+                    <div class="mb-3">
+                      <label class="form-label"
+                        >Tiempo estimado del curso</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control input-small"
+                        name="tiempoestimado"
+                        id="tiempoestimado"
+                        placeholder="Ej: 30"
+                        [(ngModel)]="cursoData.tiempoestimado"
+                        (keypress)="validateNumberInput($event)"
+                        (input)="removeNegativeNumbers()"
+                        required
+                      />
+                    </div>
                   </div>
                   <div class="row justify-content-center">
                     <div class="card border-0 mb-4">
                       <div class="custom-alert">
-                        <b>Importante:</b> Por favor, verifica que el nombre
-                        del curso y el nombre del profesor sean correctos
-                        antes de continuar, ya que no podrás editarlos en el
+                        <b>Importante:</b> Por favor, verifica que el nombre del
+                        curso esté correcto ya que no podrás editarlo en el
                         futuro.
                       </div>
                     </div>
@@ -176,9 +204,9 @@
                   <div class="row justify-content-center">
                     <div class="card border-0 mb-4">
                       <div class="custom-alert">
-                        <b>Importante:</b> Solo se admiten archivos PNG,JPEG y
-                        JPG. Te recomendamos subir como icono una imagen de
-                        dimesión 1920 x 1080.
+                        <b>Importante:</b> Solo se admiten archivos JPEG. Te
+                        recomendamos subir como icono una imagen de dimesión
+                        1920 x 1080.
                       </div>
                     </div>
                   </div>
@@ -3967,7 +3995,7 @@
       </div>
       <div style="display: flex; justify-content: end">
         <button type="submit" class="btn btn-success">
-          Editar Curso <i class="fa fa-arrow-right"></i>
+          Crear Curso <i class="fa fa-arrow-right"></i>
         </button>
       </div>
     </form>

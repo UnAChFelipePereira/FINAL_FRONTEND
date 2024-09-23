@@ -1,99 +1,142 @@
 <!-- BEGIN login -->
 <div class="login login-v2 fw-bold">
-	<!-- BEGIN login-cover -->
-	<div class="login-cover">
-		<div class="login-cover-img" [ngStyle]="{ 'background-image': 'url(/assets/img/subir/22593.jpg)' }"></div>
-		<div class="login-cover-bg"></div>
-	</div>
-	<!-- END login-cover -->
-	
-	<!-- BEGIN login-container -->
-	<div class="login-container">
-		<!-- BEGIN login-header -->
-		<div class="login-header">
-			<div class="brand">
-				<div class="d-flex align-items-center">
-					<span></span> <b>CREAR MI CUENTA</b>
-				</div>
-				<small >Registrate con tu correo institucional.</small>
-			</div>
-			<div class="icon">
-				<i class="fas fa-key"></i>
-			</div>
-		</div>
-		<!-- END login-header -->
-		
-		<!-- BEGIN login-content -->
-		
-		<div class="register-content">
-			<form #f="ngForm" (ngSubmit)="formSubmit(f)" class="fs-13px">
-				<div class="mb-3">
-					<label class="mb-2">Nombre <span class="text-danger">*</span></label>
-					<div class="row gx-3">
-						<div class="col-md-6 mb-2 mb-md-0">
-							<input type="text" name="name" class="form-control fs-13px" placeholder="Nombre" id="name" ngModel required />
-						</div>
-						<div class="col-md-6">
-							<input type="text" name="lastname" class="form-control fs-13px" placeholder="Apellido" id="lastname" ngModel required />
-						</div>
-					</div>
-				</div>
-				<div class="mb-3">
-					<label class="mb-2">Correo <span class="text-danger">*</span></label>
-					<input type="text" name="email" class="form-control fs-13px" placeholder="ejemplo@alu.unach.cl" id="email" ngModel required/>
-				</div>
-				<div class="mb-3">
-					<label class="mb-2">Reingresa tu correo <span class="text-danger">*</span></label>
-					<input type="text" name="reemail" class="form-control fs-13px" placeholder="ejemplo@alu.unach.cl" id="reemail" ngModel required />
-				</div>
-				<!-- <div class="mb-4">
-					<label class="mb-2">Contraseña <span class="text-danger">*</span></label>
-					<input type="password" name="password" class="form-control fs-13px" placeholder="Contraseña" id="password" ngModel required />
-				</div> -->
-				
-				<div class="mb-4">
-					<label class="mb-2">Contraseña <span class="text-danger">*</span></label>
-					<div class="input-group">
-						<input type="{{ showPassword ? 'text' : 'password' }}" name="password" class="form-control fs-13px" placeholder="Contraseña" [(ngModel)]="userData.password" required />
-						<button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
-							<i class="fa" [ngClass]="{'fa-eye': showPassword, 'fa-eye-slash': !showPassword}"></i>
-						</button>
-					</div>
-				</div>
-				
-				<div class="alert" role="alert" [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}">
-					{{ alertMessage }}
-				  </div>
-
-				<!-- <div class="form-check mb-4">
-					<input class="form-check-input" type="checkbox" value="" id="agreementCheckbox" />
-					<label class="form-check-label" for="agreementCheckbox">
-						Al hacer clic en registrarme, aceptas nuestros <a href="javascript:;">términos</a> y nuestras <a href="javascript:;">politicas</a>, incluyendo el uso de <a href="javascript:;">Cookies</a>.
-					</label>
-				</div> -->
-				<div class="mb-4">
-					<button type="submit" class="btn btn-theme d-block w-100 btn-lg h-45px fs-13px" style="background-color: #003a6c;">Registrarme</button>
-				</div>
-				<div class="mb-4 pb-5">
-					¿Ya tienes cuenta? Has clic <a routerLink="/login">aquí</a> para iniciar sesión.
-				</div>
-				<!-- <hr class="bg-gray-600 opacity-2" />
-				<p class="text-center text-gray-600">
-					&copy; Color Admin All Right Reserved 2023
-				</p> -->
-			</form>
-		</div>
-		</div>
-		<!-- END login-content -->
-	</div>
-	<!-- END login-container -->
-
-<!-- END login -->
-
-<!-- BEGIN login-bg 
-<div class="login-bg-list clearfix">
-  <div class="login-bg-list-item" *ngFor="let list of bgList" [ngClass]="{ 'active': list.active }">
-    <a href="javascript:;" class="login-bg-list-link" (click)="changeBg(list)" [ngStyle]="{ 'background-image': 'url(' + list.bg + ')' }"></a>
+  <!-- BEGIN login-cover -->
+  <div class="login-cover">
+    <div
+      class="login-cover-img"
+      [ngStyle]="{ 'background-image': 'url(/assets/img/subir/22593.jpg)' }"
+    ></div>
+    <div class="login-cover-bg"></div>
   </div>
-</div>-->
-<!-- END login-bg -->
+  <!-- END login-cover -->
+
+  <!-- BEGIN login-container -->
+  <div class="login-container">
+    <!-- BEGIN login-header -->
+    <div class="login-header">
+      <div class="brand">
+        <div class="d-flex align-items-center">
+          <span></span> <b>CREAR MI CUENTA</b>
+        </div>
+        <small>Registrate con tu correo institucional.</small>
+      </div>
+      <div class="icon">
+        <i class="fas fa-key"></i>
+      </div>
+    </div>
+    <!-- END login-header -->
+
+    <!-- BEGIN login-content -->
+
+    <div class="register-content">
+      <form #f="ngForm" (ngSubmit)="formSubmit(f)" class="fs-13px">
+        <div class="mb-3">
+          <label class="mb-2">Nombre <span class="text-danger">*</span></label>
+          <div class="row gx-3">
+            <div class="col-md-6 mb-2 mb-md-0">
+              <input
+                type="text"
+                name="name"
+                class="form-control fs-13px"
+                placeholder="Nombre"
+                id="name"
+                (ngModelChange)="userData.name = sanitizeAndFormatName($event)"
+                ngModel
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <input
+                type="text"
+                name="lastname"
+                class="form-control fs-13px"
+                placeholder="Apellido"
+                id="lastname"
+                (ngModelChange)="userData.name = sanitizeAndFormatName($event)"
+                ngModel
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="mb-2">Correo <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            name="email"
+            class="form-control fs-13px"
+            placeholder="ejemplo@alu.unach.cl"
+            id="email"
+            ngModel
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="mb-2"
+            >Reingresa tu correo <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            name="reemail"
+            class="form-control fs-13px"
+            placeholder="ejemplo@alu.unach.cl"
+            id="reemail"
+            ngModel
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="mb-2"
+            >Contraseña <span class="text-danger">*</span></label
+          >
+          <div class="input-group">
+            <input
+              type="{{ showPassword ? 'text' : 'password' }}"
+              name="password"
+              class="form-control fs-13px"
+              placeholder="Contraseña"
+              [(ngModel)]="userData.password"
+              required
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="togglePasswordVisibility()"
+            >
+              <i
+                class="fa"
+                [ngClass]="{'fa-eye': showPassword, 'fa-eye-slash': !showPassword}"
+              ></i>
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="alert"
+          role="alert"
+          [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
+        >
+          {{ alertMessage }}
+        </div>
+
+        <div class="mb-4">
+          <button
+            type="submit"
+            class="btn btn-theme d-block w-100 btn-lg h-45px fs-13px"
+            style="background-color: #003a6c"
+          >
+            Registrarme
+          </button>
+        </div>
+        <div class="mb-4 pb-5">
+          ¿Ya tienes cuenta? Has clic <a routerLink="/login">aquí</a> para
+          iniciar sesión.
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- END login-content -->
+</div>
+<!-- END login-container -->
+<!-- END login -->

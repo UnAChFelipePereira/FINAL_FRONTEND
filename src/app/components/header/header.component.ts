@@ -63,29 +63,6 @@ export class HeaderComponent implements OnDestroy {
 		this.getFile();
 	  }
 
-
-	//   getFile() {
-	// 	if (this.user_Id) {
-	// 	  const extensions = ['png', 'jpg', 'jpeg']; 
-	  
-
-	// 	  let perfil = '';
-	// 	  for (const ext of extensions) {
-	// 		const url = `http://localhost:3000/uploads/${encodeURIComponent(this.user_Id)}.jpg`;
-	// 		if (this.urlExists(url)) { 
-	// 		  perfil = url;
-	// 		  break;
-	// 		}
-	// 	  }
-
-	// 	  if (perfil === '') {
-	// 		perfil = `http://localhost:3000/uploads/${encodeURIComponent(this.user_Id)}`;
-	// 	  }
-	  
-	// 	  this.icono = perfil;
-	// 	}
-	//   }
-	
 	getFile() {
 		if (this.user_Id) {
 		  const extensions = ['jpg'];

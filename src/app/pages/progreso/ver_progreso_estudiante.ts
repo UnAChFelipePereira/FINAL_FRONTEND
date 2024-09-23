@@ -5,31 +5,34 @@ import { Router } from "@angular/router";
 
 @Component({
   selector: "extra-search-results",
-  templateUrl: "./configuracion_curso.html",
-  styleUrls: ["./configuracion_curso.css"],
+  templateUrl: "./ver_progreso_estudiante.html",
+  styleUrls: ["./ver_progreso_estudiante.css"],
 })
-export class ConfiguracionCurso implements OnInit {
-  cursos: Curso[] = [];
-  userId: string | null = null;
+export class VerProgresoEstudiante implements OnInit {
+  cursosInscritos: Curso[] = [];
+  user_Id: string;
   userEmail: string | null = null;
   userRol: string | null = null;
+  terminoBusqueda: string = "";
   showError: boolean = false;
   showSuccess: boolean = false;
   alertMessage: string = "";
-  cursoAEliminar: string | null = null;
-  showConfirmation: boolean = false;
-  terminoBusqueda: string = "";
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.userRol = localStorage.getItem("userRol");
+    this.user_Id = localStorage.getItem("user_Id");
     this.userEmail = localStorage.getItem("userEmail");
+    this.userRol = localStorage.getItem("userRol");
 
-    if (this.userRol === "admin") {
-      this.loadAllCursos();
-    } else if (this.userRol === "docente") {
-      this.loadCursosByEmail(this.userEmail);
+    if (this.userRol) {
+      if (this.userRol === "admin") {
+        this.loadAllCursos();
+      } else if (this.userRol === "docente" && this.userEmail) {
+        this.loadCursosByEmail(this.userEmail);
+      }
+    } else {
+      console.error("No se encontró el rol del usuario en localStorage.");
     }
   }
 
@@ -37,15 +40,19 @@ export class ConfiguracionCurso implements OnInit {
     this.authService.getAllCursos().subscribe(
       (response: any) => {
         if (Array.isArray(response)) {
-          this.cursos = response.map((curso: Curso) => {
-            const iconoUrl = `http://localhost:3000/uploads/${encodeURIComponent(
-              curso.iconocursoNombre
-            )}`;
-            return {
-              ...curso,
-              iconocursoNombre: iconoUrl,
-            };
-          });
+          this.cursosInscritos = response
+            .map((curso: Curso) => {
+              const iconoUrl = `http://localhost:3000/uploads/${encodeURIComponent(
+                curso.iconocursoNombre
+              )}`;
+              return {
+                ...curso,
+                iconocursoNombre: iconoUrl,
+              };
+            })
+            .sort((a, b) => {
+              return a.estado === b.estado ? 0 : a.estado ? -1 : 1;
+            });
         } else {
           console.error(
             "La respuesta del servidor no contiene un arreglo válido de cursos:",
@@ -63,15 +70,19 @@ export class ConfiguracionCurso implements OnInit {
     this.authService.getCursosByEmail(userEmail).subscribe(
       (response: any) => {
         if (Array.isArray(response)) {
-          this.cursos = response.map((curso: Curso) => {
-            const iconoUrl = `http://localhost:3000/uploads/${encodeURIComponent(
-              curso.iconocursoNombre
-            )}`;
-            return {
-              ...curso,
-              iconocursoNombre: iconoUrl,
-            };
-          });
+          this.cursosInscritos = response
+            .map((curso: Curso) => {
+              const iconoUrl = `http://localhost:3000/uploads/${encodeURIComponent(
+                curso.iconocursoNombre
+              )}`;
+              return {
+                ...curso,
+                iconocursoNombre: iconoUrl,
+              };
+            })
+            .sort((a, b) => {
+              return a.estado === b.estado ? 0 : a.estado ? -1 : 1;
+            });
         } else {
           console.error(
             "La respuesta del servidor no contiene un arreglo válido de cursos:",
@@ -85,40 +96,15 @@ export class ConfiguracionCurso implements OnInit {
     );
   }
 
-  toggleCursoEstado(cursoId: string, estadoActual: boolean): void {
-    const nuevoEstado = !estadoActual;
-    this.authService.updateCursoEstado(cursoId, nuevoEstado).subscribe(
-      () => {
-        this.showSuccessAlert(
-          `Curso ${nuevoEstado ? "activado" : "desactivado"} correctamente.`
-        );
-        if (this.userRol === "admin") {
-          this.loadAllCursos();
-        } else if (this.userRol === "docente") {
-          this.loadCursosByEmail(this.userEmail);
-        }
-      },
-      (error) => {
-        console.error(
-          `Error al ${nuevoEstado ? "activar" : "desactivar"} el curso:`,
-          error
-        );
-        this.showErrorAlert(
-          `Error al ${nuevoEstado ? "activar" : "desactivar"} el curso.`
-        );
-      }
-    );
-  }
-
   buscarCursos(): void {
     if (this.terminoBusqueda.trim() === "") {
       if (this.userRol === "admin") {
         this.loadAllCursos();
-      } else if (this.userRol === "docente") {
+      } else if (this.userRol === "docente" && this.userEmail) {
         this.loadCursosByEmail(this.userEmail);
       }
     } else {
-      this.cursos = this.cursos.filter((curso) =>
+      this.cursosInscritos = this.cursosInscritos.filter((curso) =>
         curso.nombre_curso
           .toLowerCase()
           .includes(this.terminoBusqueda.toLowerCase())
@@ -126,8 +112,8 @@ export class ConfiguracionCurso implements OnInit {
     }
   }
 
-  editarCurso(cursoId: string) {
-    this.router.navigate(["/editar_curso", cursoId]);
+  realizarCurso(cursoId: string) {
+    this.router.navigate(["/progreso_estudiante", cursoId]);
   }
 
   showErrorAlert(message: string) {
@@ -149,7 +135,6 @@ export class ConfiguracionCurso implements OnInit {
   hideAlerts() {
     this.showError = false;
     this.showSuccess = false;
-    this.showConfirmation = false;
     this.alertMessage = "";
   }
 }

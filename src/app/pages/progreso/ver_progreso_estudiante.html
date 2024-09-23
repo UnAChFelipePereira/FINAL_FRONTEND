@@ -1,9 +1,9 @@
 <ul class="breadcrumb">
   <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
-  <li class="breadcrumb-item active">Mis Cursos</li>
+  <li class="breadcrumb-item active">Progreso Estudiantes</li>
 </ul>
 
-<h1 class="page-header">Mis Cursos</h1>
+<h1 class="page-header">Progreso Estudiantes</h1>
 
 <div class="container">
   <div class="row">
@@ -59,6 +59,12 @@
               </p>
               <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
               <p class="desc">{{ curso.descripcion }}</p>
+              <p
+                class="estado"
+                [ngClass]="curso.estado ? 'text-success' : 'text-danger'"
+              >
+                Estado: {{ curso.estado ? 'Activo' : 'Inactivo' }}
+              </p>
             </div>
 
             <div class="result-price">
@@ -66,7 +72,7 @@
                 href="javascript:;"
                 class="btn btn-primary d-block w-100"
                 (click)="realizarCurso(curso._id)"
-                >Realizar curso</a
+                >Ver Progreso</a
               >
             </div>
           </div>

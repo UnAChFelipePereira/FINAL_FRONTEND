@@ -24,7 +24,6 @@
       </form>
 
       <div class="result-list">
-        <!-- Alerta de error o éxito -->
         <div
           class="position-fixed top-50 start-50 translate-middle"
           *ngIf="showError || showSuccess"
@@ -35,7 +34,12 @@
             [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
           >
             {{ alertMessage }}
-            <button type="button" class="btn-close" aria-label="Close" (click)="hideAlerts()"></button>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              (click)="hideAlerts()"
+            ></button>
           </div>
         </div>
 
@@ -50,6 +54,9 @@
               <h4 class="title">
                 <a href="javascript:;">{{ curso.nombre_curso }}</a>
               </h4>
+              <p class="location">
+                Tiempo estimado del curso: {{ curso.tiempoestimado }} minutos
+              </p>
               <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
               <p class="desc">{{ curso.descripcion }}</p>
             </div>
@@ -57,7 +64,7 @@
             <div class="result-price">
               <a
                 href="javascript:;"
-                class="btn btn-yellow d-block w-100"
+                class="btn btn-primary d-block w-100"
                 (click)="enrollUserInCurso(curso._id)"
               >
                 Inscribirme

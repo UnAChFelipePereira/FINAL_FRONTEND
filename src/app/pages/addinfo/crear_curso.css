@@ -1,66 +1,54 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 @import '~@yaireo/tagify/dist/tagify.css';
 
 
 .fixed-top {
-    position: sticky;
-    top: 45px;
-    bottom: 0px;
-    width: 100%;
-    z-index: 1000;
-    background-color: #DEE2E6;
-    opacity: 1;
-    padding: 10px 0; 
+  position: sticky;
+  top: 45px;
+  width: 100%;
+  max-width: 100%;
+  z-index: 1000;
+  background-color: #ffffff;
+  opacity: 1;
+  padding: 10px 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0; 
 }
 
+
 .nav-link.active {
-    font-weight: bold; 
+  font-weight: bold; 
 }
-  
+
 .nav-link.completed {
-    color: rgb(0, 87, 128); 
+  color: rgb(0, 87, 128); 
 }
 
 .custom-alert {
-    background-color: #FFFFCC; 
-    border: 1px solid #FFD700; 
-    border-radius: 5px; 
-    padding: 15px; 
-    color: #333; 
-    /* font-weight: bold;  */
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  */
-    margin-top: 10px; 
-  }
-  
-  .custom-alert b {
-    color: #b57c00; 
-  }
+  background-color: #FFFFCC; 
+  border: 1px solid #FFD700; 
+  border-radius: 5px; 
+  padding: 15px; 
+  color: #333; 
+  margin-top: 10px; 
+}
 
-/* Asegúrate de que el contenedor nav-wizards-container no se superponga con el contenido de la página */
-/* body {
-    padding-top: 130px; /* Ajusta este valor según la altura combinada del header y la barra de navegación 
-} */
+.custom-alert b {
+  color: #b57c00; 
+}
 
-/* Asegúrate de que el contenedor nav-wizards-container no se superponga con el contenido de la página */
-/* body {
-    padding-top: 130px; /* Ajusta este valor según la altura combinada del header y la barra de navegación 
-} */
-/* @import '~@yaireo/tagify/dist/tagify.css';
-.fixed-top {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background-color: #DEE2E6;
-    opacity: 1;
-    padding: 30px 0;
-  }
-  
+.content {
+  border: none; 
+  border: 1px solid #e0e0e0;
+}
 
-  .nav-link.active {
-    font-weight: bold; 
+  .input-small {
+    width: 75px;  
   }
-  
-  .nav-link.completed {
-    color: rgb(0, 87, 128); 
-  }
-
-   */

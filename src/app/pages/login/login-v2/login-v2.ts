@@ -1,40 +1,36 @@
-import { Component } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { AuthService } from '../../../components/auth/auth.service';
-
-//import { access } from 'fs';
-
+import { Component } from "@angular/core";
+import { Router, CanActivate } from "@angular/router";
+import { NgForm } from "@angular/forms";
+import { AuthService } from "../../../components/auth/auth.service";
 
 @Component({
-  selector: 'login-v2',
-  templateUrl: './login-v2.html'
+  selector: "login-v2",
+  templateUrl: "./login-v2.html",
 })
 export class LoginV2Page {
-
   constructor(private authService: AuthService, private router: Router) {}
 
   formSubmit(f: NgForm) {
     if (f.valid) {
       const formData = f.value;
-      
+
       this.authService.login(formData.email, formData.password).subscribe(
-        response => {
-          console.log('Respuesta del inicio de sesión:', response);
-          
+        (response) => {
+          console.log("Respuesta del inicio de sesión:", response);
 
-          localStorage.setItem('access_token', response.access_token);
-          localStorage.setItem('refresh_token', response.refresh_token);
-          localStorage.setItem('user_Id', response.user._id);
+          localStorage.setItem("access_token", response.access_token);
+          localStorage.setItem("refresh_token", response.refresh_token);
+          localStorage.setItem("user_Id", response.user._id);
+          localStorage.setItem("rol", response.rol);
 
-          console.log(response.access_token)
-          console.log(response.refresh_token)
-          
-          this.router.navigate(['dashboard']);
+          console.log(response.access_token);
+          console.log(response.refresh_token);
+
+          this.router.navigate(["dashboard"]);
           return true;
         },
-        error => {
-          console.error('Error al iniciar sesión:', error);
+        (error) => {
+          console.error("Error al iniciar sesión:", error);
         }
       );
     }

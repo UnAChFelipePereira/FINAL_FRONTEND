@@ -1,9 +1,9 @@
 <ul class="breadcrumb">
   <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
-  <li class="breadcrumb-item active">Buscar Cursos</li>
+  <li class="breadcrumb-item active">Configurar Cursos</li>
 </ul>
 
-<h1 class="page-header">Buscar Cursos</h1>
+<h1 class="page-header">Configurar Cursos</h1>
 
 <div class="container">
   <div class="row">
@@ -25,14 +25,13 @@
     </div>
   </div>
 
-  <!-- Confirmación de eliminación -->
   <div
     class="position-fixed top-50 start-50 translate-middle"
     *ngIf="showConfirmation"
   >
     <div class="confirmation-dialog">
       <div class="confirmation-content">
-        <h2>¿Estás seguro de que quieres eliminar este curso?</h2>
+        <h2>¿Estás seguro de que quieres dejar inactivo este curso?</h2>
         <div class="buttons">
           <button
             type="button"
@@ -75,7 +74,6 @@
 
   <div class="row">
     <div class="col-md-12">
-      <!-- Lista de resultados de cursos -->
       <div class="result-list">
         <div *ngIf="cursos.length > 0">
           <div class="result-item" *ngFor="let curso of cursos">
@@ -88,29 +86,32 @@
               <h4 class="title">
                 <a href="javascript:;">{{ curso.nombre_curso }}</a>
               </h4>
+              <p class="location">
+                Tiempo estimado del curso: {{ curso.tiempoestimado }} minutos
+              </p>
               <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
               <p class="desc">{{ curso.descripcion }}</p>
             </div>
             <div class="result-price">
               <button
-              type="button"
-              class="btn btn-yellow d-block w-100"
-              (click)="editarCurso(curso._id)"
-            >
-              Editar Curso
-            </button>
+                type="button"
+                class="btn"
+                [ngClass]="curso.estado ? 'btn-danger-dark' : 'btn-success'"
+                (click)="toggleCursoEstado(curso._id, curso.estado)"
+              >
+                {{ curso.estado ? 'Desactivar Curso' : 'Activar Curso' }}
+              </button>
               <button
                 type="button"
-                class="btn btn-danger-dark d-block w-100"
-                (click)="confirmarEliminacion(curso._id)"
+                class="btn btn-yellow d-block w-100"
+                (click)="editarCurso(curso._id)"
               >
-                Eliminar Curso
+                Editar Curso
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Mensaje de no se encontraron cursos -->
         <div *ngIf="cursos.length === 0" class="no-results">
           No se encontraron cursos.
         </div>
@@ -118,153 +119,3 @@
     </div>
   </div>
 </div>
-
-<!-- <ul class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
-  <li class="breadcrumb-item active">Buscar Cursos</li>
-</ul>
-
-<h1 class="page-header">Buscar Cursos</h1>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form (submit)="buscarCursos()">
-        <div class="input-group input-group-lg mb-3">
-          <input
-            type="text"
-            class="form-control input-white"
-            placeholder="Ingrese palabras claves aquí.."
-            [(ngModel)]="terminoBusqueda"
-            name="terminoBusqueda"
-          />
-          <button type="submit" class="btn btn-primary">
-            <i class="fa fa-search fa-fw"></i> Buscar
-          </button>
-        </div>
-      </form>
-
-      <div class="result-list">
-
-        <div
-          class="position-fixed top-50 start-50 translate-middle"
-          *ngIf="showConfirmation"
-        >
-          <div
-            class="alert alert-danger alert-dismissible fade show"
-            role="alert"
-          >
-            ¿Estás seguro de que quieres eliminar este curso?
-            <button type="button" class="btn btn-primary" (click)="eliminarCurso()">Aceptar</button>
-             
-            <button type="button" class="btn btn-secondary" (click)="hideAlerts()">Cancelar</button>
-          </div>
-        </div>
-
-
-        <div
-          class="position-fixed top-50 start-50 translate-middle"
-          *ngIf="showSuccess"
-        >
-          <div
-            class="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            {{ alertMessage }}
-            <button type="button" class="btn-close" aria-label="Close" (click)="hideAlerts()"></button>
-          </div>
-        </div>
-
-        <div *ngIf="cursos.length > 0" class="result-list">
-          <div class="result-item" *ngFor="let curso of cursos">
-            <a class="result-image" [style.backgroundImage]="'url(' + curso.iconocursoNombre + ')'" [title]="curso.nombre_curso"></a>
-            <div class="result-info">
-              <h4 class="title"><a href="javascript:;">{{ curso.nombre_curso }}</a></h4>
-              <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
-              <p class="desc">{{ curso.descripcion }}</p>
-            </div>
-            <div class="result-price">
-              <a href="javascript:;" class="btn btn-danger d-block w-100" (click)="confirmarEliminacion(curso._id)">
-                Eliminar Curso
-              </a>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="cursos.length === 0" class="no-results">
-          No se encontraron cursos.
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<!-- <ul class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
-  <li class="breadcrumb-item active">Buscar Cursos</li>
-</ul>
-
-<h1 class="page-header">Buscar Cursos</h1>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form (submit)="buscarCursos()">
-        <div class="input-group input-group-lg mb-3">
-          <input
-            type="text"
-            class="form-control input-white"
-            placeholder="Ingrese palabras claves aquí.."
-            [(ngModel)]="terminoBusqueda"
-            name="terminoBusqueda"
-          />
-          <button type="submit" class="btn btn-primary">
-            <i class="fa fa-search fa-fw"></i> Buscar
-          </button>
-        </div>
-      </form>
-
-      <div class="result-list">
-
-        <div
-          class="position-fixed top-50 start-50 translate-middle"
-          *ngIf="showError || showSuccess"
-        >
-          <div
-            class="alert alert-dismissible fade show"
-            role="alert"
-            [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
-          >
-            {{ alertMessage }}
-            <button type="button" class="btn-close" aria-label="Close" (click)="hideAlerts()"></button>
-          </div>
-        </div>
-
-        <div *ngIf="cursos.length > 0" class="result-list">
-          <div class="result-item" *ngFor="let curso of cursos">
-            <a class="result-image" [style.backgroundImage]="'url(' + curso.iconocursoNombre + ')'" [title]="curso.nombre_curso"></a>
-            <div class="result-info">
-              <h4 class="title"><a href="javascript:;">{{ curso.nombre_curso }}</a></h4>
-              <p class="location">Profesor: {{ curso.nombre_profesor }}</p>
-              <p class="desc">{{ curso.descripcion }}</p>
-            </div>
-            <div class="result-price">
-              <a href="javascript:;" class="btn btn-danger d-block w-100" (click)="eliminarCurso(curso._id)">
-                Eliminar Curso
-              </a>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="cursos.length === 0" class="no-results">
-          No se encontraron cursos.
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-<!-- </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

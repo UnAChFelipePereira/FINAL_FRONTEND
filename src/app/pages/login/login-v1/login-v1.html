@@ -1,67 +1,97 @@
 <!-- BEGIN login -->
 <div class="login login-v2 fw-bold">
-	<div class="login-cover">
-		<div class="login-cover-img" [ngStyle]="{ 'background-image': 'url(/assets/img/subir/campus_unach.jpg)' }"></div>
-		<div class="login-cover-bg"></div>
-	  </div>
-	<!-- BEGIN login-container -->
-	<div class="login-container">
-		<div class="login-cover-img"></div>
-		<!-- BEGIN login-header -->
-		<div class="login-header">
-			<div class="brand">
-				<div class="d-flex align-items-center">
-				  <span src="/assets/img/subir/logo-unach-fin.jpg"></span> <b>AULA</b> VIRTUAL
-				</div>
-				<small class="color-text: white">Universidad Adventista De Chile</small>
-			  </div>
-			<div class="icon">
-				<i class="fa fa-lock"></i>
-				<!-- <img src="/assets/img/subir/logo.png" style="width: 80px; height: 80px; opacity: 1;"  /> -->
+  <div class="login-cover">
+    <div
+      class="login-cover-img"
+      [ngStyle]="{ 'background-image': 'url(/assets/img/subir/campus_unach.jpg)' }"
+    ></div>
+    <div class="login-cover-bg"></div>
+  </div>
+  <!-- BEGIN login-container -->
+  <div class="login-container">
+    <div class="login-cover-img"></div>
+    <!-- BEGIN login-header -->
+    <div class="login-header">
+      <div class="brand">
+        <div class="d-flex align-items-center">
+          <span src="/assets/img/subir/logo-unach-fin.jpg"></span>
+          <b>AULA</b> VIRTUAL
+        </div>
+        <small class="color-text: white">Universidad Adventista De Chile</small>
+      </div>
+      <div class="icon">
+        <i class="fa fa-lock"></i>
+      </div>
+    </div>
+    <!-- END login-header -->
 
-			</div>
-		</div>
-		<!-- END login-header -->
-		
-		<!-- BEGIN login-body -->
-		<div class="login-body">
-			<!-- BEGIN login-content -->
-			<div class="login-content">
-				<form #f="ngForm" (ngSubmit)="formSubmit(f)">
-				  <div class="form-floating mb-20px">
-					<input type="text" name="email" class="form-control fs-13px h-45px border-0" placeholder="Correo" id="email" ngModel required />
-					<label for="email" class="d-flex align-items-center text-gray-600 fs-13px">Correo</label>
-				  </div>
-				  <div class="form-floating mb-20px">
-					<input type="password" name="password" class="form-control fs-13px h-45px border-0" placeholder="Contraseña" ngModel required />
-					<label for="password" class="d-flex align-items-center text-gray-600 fs-13px">Contraseña</label>
-				  </div>
+    <!-- BEGIN login-body -->
+    <div class="login-body">
+      <!-- BEGIN login-content -->
+      <div class="login-content">
+        <form #f="ngForm" (ngSubmit)="formSubmit(f)">
+          <div class="form-floating mb-20px">
+            <input
+              type="text"
+              name="email"
+              class="form-control fs-13px h-45px border-0"
+              placeholder="Correo"
+              id="email"
+              ngModel
+              required
+            />
+            <label
+              for="email"
+              class="d-flex align-items-center text-gray-600 fs-13px"
+              >Correo</label
+            >
+          </div>
+          <div class="form-floating mb-20px">
+            <input
+              type="password"
+              name="password"
+              class="form-control fs-13px h-45px border-0"
+              placeholder="Contraseña"
+              ngModel
+              required
+            />
+            <label
+              for="password"
+              class="d-flex align-items-center text-gray-600 fs-13px"
+              >Contraseña</label
+            >
+          </div>
 
-				  <div class="mb-20px">
-					<div> <a routerLink="/forgot-password">Recuperar contraseña</a></div>
-				  </div>
-				  
-				  <!-- <div class="form-check mb-20px">
-					<input class="form-check-input border-0" type="checkbox" value="1" id="rememberMe" />
-					<label class="form-check-label fs-13px" for="rememberMe">
-					  Recordarme
-					</label>
-				  </div> -->
-				  <div class="alert" role="alert" [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}">
-					{{ alertMessage }}
-				  </div>
-				  <div class="mb-20px">
-					<button type="submit" class="btn btn-theme d-block w-100 h-45px btn-lg" style="background-color: #003a6c;">Iniciar Sesión</button>
-				  </div>
-				  <div>
-					¿Aún no tienes cuenta? Has click <a routerLink="/register">aquí</a> para registrarte.
-				  </div>
-				</form>
-			  </div>
-			<!-- END login-content -->
-		</div>
-		<!-- END login-body -->
-	</div>
-	<!-- END login-container -->
+          <div class="mb-20px">
+            <div><a routerLink="/forgot-password">Recuperar contraseña</a></div>
+          </div>
+
+          <div
+            class="alert"
+            role="alert"
+            [ngClass]="{'alert-danger': showError, 'alert-success': showSuccess}"
+          >
+            {{ alertMessage }}
+          </div>
+          <div class="mb-20px">
+            <button
+              type="submit"
+              class="btn btn-theme d-block w-100 h-45px btn-lg"
+              style="background-color: #003a6c"
+            >
+              Iniciar Sesión
+            </button>
+          </div>
+          <div>
+            ¿Aún no tienes cuenta? Has click
+            <a routerLink="/register">aquí</a> para registrarte.
+          </div>
+        </form>
+      </div>
+      <!-- END login-content -->
+    </div>
+    <!-- END login-body -->
+  </div>
+  <!-- END login-container -->
 </div>
 <!-- END login -->

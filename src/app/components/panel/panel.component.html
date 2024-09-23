@@ -1,12 +1,29 @@
 <!-- BEGIN panel -->
-<div class="panel" [ngClass]="[ (this.expand) ? 'panel-expand': '', (this.reload) ? 'panel-loading': '', (this.panelClass) ? this.panelClass : '', (this.variant) ? 'panel-' + this.variant : 'panel-inverse' ]" *ngIf="!this.remove">
+<div
+  class="panel"
+  [ngClass]="[
+    this.expand ? 'panel-expand' : '',
+    this.reload ? 'panel-loading' : '',
+    this.panelClass ? this.panelClass : '',
+    this.variant ? 'panel-' + this.variant : 'panel-inverse'
+  ]"
+  *ngIf="!this.remove"
+>
   <!-- BEGIN panel-heading -->
-  <div class="panel-heading" [ngClass]="[ (this.headerClass) ? this.headerClass : '' ]">
+  <div
+    class="panel-heading"
+    [ngClass]="[this.headerClass ? this.headerClass : '']"
+  >
     <!-- <h4 class="panel-title" *ngIf="this.title">{{ title }}</h4> -->
     <ng-content select="[header]"></ng-content>
     <div class="panel-heading-btn" *ngIf="!this.noButton">
       <!-- <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" (click)="panelExpand()"><i class="fa fa-expand"></i></a> -->
-      <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" (click)="panelReload()"><i class="fa fa-redo"></i></a>
+      <a
+        href="javascript:;"
+        class="btn btn-xs btn-icon btn-circle btn-success"
+        (click)="panelReload()"
+        ><i class="fa fa-redo"></i
+      ></a>
       <!-- <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" (click)="panelCollapse()"><i class="fa fa-minus"></i></a> -->
       <!-- <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" (click)="panelRemove()"><i class="fa fa-times"></i></a> -->
     </div>
@@ -18,9 +35,18 @@
   <!-- END before-body -->
 
   <!-- BEGIN panel-body -->
-  <div class="panel-body" [ngClass]="[ (this.collapse) ? 'd-none': '', (this.bodyClass) ? this.bodyClass : '' ]" *ngIf="!this.noBody">
+  <div
+    class="panel-body"
+    [ngClass]="[
+      this.collapse ? 'd-none' : '',
+      this.bodyClass ? this.bodyClass : ''
+    ]"
+    *ngIf="!this.noBody"
+  >
     <ng-content></ng-content>
-    <div class="panel-loader" *ngIf="this.reload"><span class="spinner spinner-sm"></span></div>
+    <div class="panel-loader" *ngIf="this.reload">
+      <span class="spinner spinner-sm"></span>
+    </div>
   </div>
   <!-- END panel-body -->
 
@@ -33,7 +59,12 @@
   <!-- END outside-body -->
 
   <!-- BEGIN panel-footer -->
-  <div class="panel-footer" #panelFooter [hidden]="!showFooter" [ngClass]="[ (this.footerClass) ? this.footerClass : '' ]">
+  <div
+    class="panel-footer"
+    #panelFooter
+    [hidden]="!showFooter"
+    [ngClass]="[this.footerClass ? this.footerClass : '']"
+  >
     <ng-content select="[footer]"></ng-content>
   </div>
   <!-- END panel-footer -->

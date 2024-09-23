@@ -32,9 +32,11 @@
   background-color: #a71d2a;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 0;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
+  text-align: center;
 }
 
 .btn-danger-dark:hover {
@@ -54,6 +56,23 @@
   background-color: #f1b0b7;
 }
 
+.btn-success {
+  border: none;
+  padding: 10px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-yellow {
+  border: none;
+  padding: 10px 0; 
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; 
+  text-align: center;
+}
 
 .alert {
   position: fixed;
@@ -72,16 +91,36 @@
 
 .btn-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 2px;
+  right: 2px;
   color: #721c24;
   cursor: pointer;
   border: none;
   background: none;
+  font-size: 1rem;
+  z-index: 4000;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.btn-close::before {
+  content: '✕';
+  font-size: 1rem;
+  color: #721c24;
 }
 
 .btn-close:hover {
   color: #931923;
+}
+
+.btn-close:focus {
+  outline: none;
+  box-shadow: none;
+  border: none; 
 }
 
 .position-fixed {

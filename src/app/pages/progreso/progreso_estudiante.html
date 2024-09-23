@@ -1,59 +1,98 @@
 <ul class="breadcrumb">
-	<li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
-	<li class="breadcrumb-item active">Progreso estudiantes</li>
-  </ul>
-  
-  <h1 class="page-header">Progreso estudiantes</h1>
-  
+  <li class="breadcrumb-item"><a href="/inicio">Inicio</a></li>
+  <li class="breadcrumb-item">
+    <a href="/ver_progreso_estudiante">Progreso Estudiantes</a>
+  </li>
+  <li class="breadcrumb-item active">{{nombreCurso}}</li>
+</ul>
+
+<div *ngIf="filteredCursoData.length === 0">
+  <h1>No hay progreso en este curso :(</h1>
+</div>
+
+<div *ngIf="filteredCursoData.length > 0">
+  <h1 class="page-header">{{nombreCurso}}</h1>
+
   <div class="row">
-	<div class="col-xl-6" *ngFor="let chartOption of chartOptions; let i = index">
-	  <div id="apexChartColumnChart{{i}}" class="mb-5">
-		<panel title="Panel Success" headerClass="bg-blue-700">
-		  <apx-chart
-			[series]="chartOption.chart.series"
-			[chart]="chartOption.chart.chart"
-			[colors]="chartOption.chart.colors"
-			[legend]="chartOption.chart.legend"
-			[xaxis]="chartOption.chart.xaxis"
-			[yaxis]="chartOption.chart.yaxis"
-			[dataLabels]="chartOption.chart.dataLabels"
-			[grid]="chartOption.chart.grid"
-			[stroke]="chartOption.chart.stroke"
-			[title]="chartOption.chart.title"
-			[plotOptions]="chartOption.chart.plotOptions"
-			[fill]="chartOption.chart.fill"
-			[tooltip]="chartOption.chart.tooltip"
-		  ></apx-chart>
-		</panel>
-		<div class="table-container mt-4">
-		  <table class="table">
-			<thead>
-			  <tr>
-				<th>Nombre</th>
-				<th>Apellido</th>
-				<th>Fase</th>
-				<th>Pregunta 1</th>
-				<th>Pregunta 2</th>
-				<th>Pregunta 3</th>
-				<th>Pregunta 4</th>
-				<th>Pregunta 5</th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <tr *ngFor="let data of chartOption.tableData">
-				<td>{{ data.name }}</td>
-				<td>{{ data.lastname }}</td>
-				<td>{{ data.faseId }}</td>
-				<td><i [ngClass]="data.pregunta1 ? 'fa fa-check' : 'fa fa-times'"></i></td>
-				<td><i [ngClass]="data.pregunta2 ? 'fa fa-check' : 'fa fa-times'"></i></td>
-				<td><i [ngClass]="data.pregunta3 ? 'fa fa-check' : 'fa fa-times'"></i></td>
-				<td><i [ngClass]="data.pregunta4 ? 'fa fa-check' : 'fa fa-times'"></i></td>
-				<td><i [ngClass]="data.pregunta5 ? 'fa fa-check' : 'fa fa-times'"></i></td>
-			  </tr>
-			</tbody>
-		  </table>
-		</div>
-	  </div>
-	</div>
+    <div class="col-12">
+      <div id="apexChartColumnChart" class="mb-5">
+        <panel title="Panel Success" headerClass="bg-blue-700">
+          <apx-chart
+            [series]="chartOptions[0]?.chart.series"
+            [chart]="chartOptions[0]?.chart.chart"
+            [colors]="chartOptions[0]?.chart.colors"
+            [legend]="chartOptions[0]?.chart.legend"
+            [xaxis]="chartOptions[0]?.chart.xaxis"
+            [yaxis]="chartOptions[0]?.chart.yaxis"
+            [dataLabels]="chartOptions[0]?.chart.dataLabels"
+            [grid]="chartOptions[0]?.chart.grid"
+            [stroke]="chartOptions[0]?.chart.stroke"
+            [title]="chartOptions[0]?.chart.title"
+            [plotOptions]="chartOptions[0]?.chart.plotOptions"
+            [fill]="chartOptions[0]?.chart.fill"
+            [tooltip]="chartOptions[0]?.chart.tooltip"
+          ></apx-chart>
+        </panel>
+      </div>
+    </div>
   </div>
-  
+
+  <div class="fase-buttons">
+    <button
+      *ngFor="let fase of fases"
+      (click)="selectFase(fase)"
+      [class.active]="fase === selectedFase"
+    >
+      {{ fase }}
+    </button>
+  </div>
+
+  <div *ngIf="selectedFase" class="table-container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <h3>{{ selectedFase }}</h3>
+      <button class="btn btn-primary" (click)="downloadCSV()">
+        Descargar Datos
+      </button>
+    </div>
+    <table class="table mt-2">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo electrónico</th>
+          <th>Tiempo en la fase</th>
+          <th>Nota</th>
+          <th>Pregunta 1</th>
+          <th>Pregunta 2</th>
+          <th>Pregunta 3</th>
+          <th>Pregunta 4</th>
+          <th>Pregunta 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of filteredCursoData">
+          <td>{{ data.name }}</td>
+          <td>{{ data.lastname }}</td>
+          <td>{{ data.email }}</td>
+          <td>{{ data.totalTime }}</td>
+          <td>{{ data.nota }}</td>
+          <td>
+            <i [ngClass]="data.pregunta1 ? 'fa fa-check' : 'fa fa-times'"></i>
+          </td>
+          <td>
+            <i [ngClass]="data.pregunta2 ? 'fa fa-check' : 'fa fa-times'"></i>
+          </td>
+          <td>
+            <i [ngClass]="data.pregunta3 ? 'fa fa-check' : 'fa fa-times'"></i>
+          </td>
+          <td>
+            <i [ngClass]="data.pregunta4 ? 'fa fa-check' : 'fa fa-times'"></i>
+          </td>
+          <td>
+            <i [ngClass]="data.pregunta5 ? 'fa fa-check' : 'fa fa-times'"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

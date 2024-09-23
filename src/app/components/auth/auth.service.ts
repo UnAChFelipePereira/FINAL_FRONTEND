@@ -5,7 +5,12 @@ import {
   HttpHeaders,
 } from "@angular/common/http";
 import { Observable, catchError, last, tap, throwError } from "rxjs";
-import { CanActivate,ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router";
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from "@angular/router";
 import { Curso } from "../../pages/vercursos/curso.model";
 import { ProgresoEstudiantes } from "../../pages/progreso/progreso.model";
 
@@ -31,9 +36,8 @@ export class AuthService implements CanActivate {
   private primerafase = "http://localhost:3000/primerafase/crear";
   private primerafasecheck = "http://localhost:3000/primerafase";
   private obtenerdatos = "http://localhost:3000/primerafase";
-  private buscarDatosCursos = "http://localhost:3000/primerafase"
-  private subir = "http://localhost:3000/files/upload"
-
+  private buscarDatosCursos = "http://localhost:3000/primerafase";
+  private subir = "http://localhost:3000/files/upload";
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -49,14 +53,16 @@ export class AuthService implements CanActivate {
       email,
       lastname,
       password,
-      rol
+      rol,
     });
   }
 
   crearcurso(
     nombre_curso: string,
     nombre_profesor: string,
+    userEmail: string,
     descripcion: string,
+    tiempoestimado: number,
     iconocursoNombre: string,
     archivo_pt1Nombre: string,
     descripcionpt1: string,
@@ -217,12 +223,15 @@ export class AuthService implements CanActivate {
     respuesta2p5pt5: string,
     respuesta3p5pt5: string,
     respuesta4p5pt5: string,
-    respuestacorrectap5pt5: string
+    respuestacorrectap5pt5: string,
+    estado: boolean
   ) {
     return this.http.post<any>(`${this.apiUrlCurso}`, {
       nombre_curso,
       nombre_profesor,
+      userEmail,
       descripcion,
+      tiempoestimado,
       iconocursoNombre,
       archivo_pt1Nombre,
       descripcionpt1,
@@ -384,6 +393,7 @@ export class AuthService implements CanActivate {
       respuesta3p5pt5,
       respuesta4p5pt5,
       respuestacorrectap5pt5,
+      estado,
     });
   }
 
@@ -395,44 +405,30 @@ export class AuthService implements CanActivate {
   }
 
   activateAccount(token: string): Observable<any> {
-    return this.http.get<any>(`${this.baseCursos}/activate-account`, { params: { token } }).pipe(
-      catchError(this.handleErrors)
-    );
+    return this.http
+      .get<any>(`${this.baseCursos}/activate-account`, { params: { token } })
+      .pipe(catchError(this.handleErrors));
   }
 
   private handleErrors(error: HttpErrorResponse) {
-    let errorMessage = 'An unknown error occurred!';
+    let errorMessage = "An unknown error occurred!";
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(() => new Error(errorMessage));
   }
 
-  // login(email: string, password: string): Observable<any> {
-  //   return this.http.post<any>(this.apiUrllogin, { email, password }).pipe(
-  //     tap((response) => {
-  //       localStorage.setItem('access_token', response.access_token);
-  //       localStorage.setItem('userEmail', response.user.email);
-  //       localStorage.setItem('userName', response.user.name);
-  //       localStorage.setItem('userLastName', response.user.lastname);
-  //     }),
-  //     catchError(this.handleError)
-  //   );
-  // }
-
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrllogin}`, { email, password }).pipe(
       tap((response: any) => {
-        localStorage.setItem('access_token', response.access_token);
-        localStorage.setItem('userRole', response.user.role);
-        localStorage.setItem('userEmail', response.user.email);
-        localStorage.setItem('userName', response.user.name);
-        localStorage.setItem('userLastName', response.user.lastname);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem("access_token", response.access_token);
+        localStorage.setItem("userRole", response.user.role);
+        localStorage.setItem("userEmail", response.user.email);
+        localStorage.setItem("userName", response.user.name);
+        localStorage.setItem("userLastName", response.user.lastname);
+        localStorage.setItem("user", JSON.stringify(response.user));
       })
     );
   }
@@ -469,7 +465,7 @@ export class AuthService implements CanActivate {
     newPassword: string
   ): Observable<any> {
     return this.http.put<any>(`${this.apiUlrchange}`, {
-       email,
+      email,
       oldPassword,
       newPassword,
     });
@@ -489,6 +485,10 @@ export class AuthService implements CanActivate {
     return this.http.post<any>(`${this.apiUrlfoto}`, formData);
   }
 
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseCursos}/${userId}`);
+  }
+
   logout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("userEmail");
@@ -499,28 +499,27 @@ export class AuthService implements CanActivate {
     this.router.navigate(["/login"]);
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    // Obtener el token de acceso del almacenamiento local
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     const token = localStorage.getItem("access_token");
 
-    // Verificar si el token existe y no es nulo ni vacío
     if (token && token.trim() !== "") {
-      // Si el token existe, verificar el rol del usuario si se ha proporcionado un rol esperado
       const expectedRole = route.data.expectedRole;
       if (expectedRole) {
         const currentUserRole = this.getCurrentUserRole();
         if (currentUserRole !== expectedRole) {
-          // Si el rol del usuario no coincide con el rol esperado, redirigir y retornar falso
-          console.log(`Acceso denegado. Rol esperado: ${expectedRole}, Rol del usuario: ${currentUserRole}`);
+          console.log(
+            `Acceso denegado. Rol esperado: ${expectedRole}, Rol del usuario: ${currentUserRole}`
+          );
           this.router.navigate(["/inicio"]);
           return false;
         }
       }
-      // Si no se ha proporcionado un rol esperado o el rol coincide, permitir el acceso
       console.log("Usuario autenticado. Permitiendo acceso.");
       return true;
     } else {
-      // Si no hay token, redirigir al usuario al componente de login y retornar falso
       console.log("No se ha detectado ningún token. Redirigiendo al login.");
       this.router.navigate(["/login"]);
       return false;
@@ -531,15 +530,14 @@ export class AuthService implements CanActivate {
     return this.http.delete(`${this.baseCurso}/${cursoId}`);
   }
 
-
   getCursoById(cursoId: string): Observable<any> {
     return this.http.get<any>(`${this.baseCurso}/${cursoId}`);
   }
 
   enrollUserInCurso(userId: string, cursoId: string) {
     return this.http.post<any>(
-      `${this.baseCurso}/${userId}/enroll/${cursoId}`,
-      { userId, cursoId },
+      `${this.baseCursos}/${userId}/enroll/${cursoId}`,
+      { userId, cursoId }
     );
   }
 
@@ -555,8 +553,12 @@ export class AuthService implements CanActivate {
     return this.http.put(`${this.baseCurso}/${id}`, cursoData);
   }
 
+  updateArchivoNombre(cursoId: string, data: any): Observable<any> {
+    return this.http.put(`${this.baseCurso}/${cursoId}/archivo`, data);
+  }
+
   addEvento(evento: any): Observable<any> {
-    const headers = new HttpHeaders(); // Aquí puedes configurar los headers según lo necesites
+    const headers = new HttpHeaders();
 
     return this.http.post<any>(this.event, evento, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -583,49 +585,20 @@ export class AuthService implements CanActivate {
     userId: string,
     nuevaPosicion: Date
   ): Observable<any> {
-    // Asegúrate de que cursoId y userId estén en el orden correcto según tu backend
-    return this.http.put<any>(
-      `${this.eventos}/${userId}/${cursoId}/posicion`, // URL con userId, cursoId y 'posicion'
-      { nuevaPosicion } // Envía solo la nuevaPosicion si es necesario
-    );
+    return this.http.put<any>(`${this.eventos}/${userId}/${cursoId}/posicion`, {
+      nuevaPosicion,
+    });
   }
-
-
-
 
   getEventos(): Observable<any[]> {
     return this.http.get<any[]>(this.eventos);
   }
 
-  crearprimerafase(
-    userId: string,
-    name: string,
-    lastname: string,
+  checkIfCourseCompleted(
     cursoId: string,
-    Nombre_Curso: string,
-    pregunta1: boolean,
-    pregunta2: boolean,
-    pregunta3: boolean,
-    pregunta4: boolean,
-    pregunta5: boolean,
+    userId: string,
     faseId: string
-  ) {
-    return this.http.post<any>(`${this.primerafase}/${userId}/${cursoId}`, {
-      userId,
-      name,
-      lastname,
-      cursoId,
-      Nombre_Curso,
-      pregunta1,
-      pregunta2,
-      pregunta3,
-      pregunta4,
-      pregunta5,
-      faseId,
-    });
-  }
-
-  checkIfCourseCompleted(cursoId: string, userId: string, faseId: string) {
+  ): Observable<boolean> {
     return this.http.get<boolean>(
       `${this.primerafasecheck}/${cursoId}/${userId}/${faseId}/completed`
     );
@@ -639,17 +612,56 @@ export class AuthService implements CanActivate {
     return this.http.get<any>(this.buscarDatosCursos);
   }
 
-
   uploadDoc(file: File): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     return this.http.post<any>(`${this.subir}`, formData);
   }
 
-
   getCurrentUserRole(): string {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.rol || 'estudiante';
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return user.rol || "estudiante";
   }
 
+  startCourse(data: {
+    userId: string;
+    name: string;
+    lastname: string;
+    email: string;
+    cursoId: string;
+    Nombre_Curso: string;
+    faseId: string;
+    startTime: Date;
+  }): Observable<any> {
+    return this.http.post(`${this.obtenerdatos}/start-course`, data);
+  }
+
+  endCourse(data: any): Observable<any> {
+    return this.http.post(`${this.obtenerdatos}/end-course`, data);
+  }
+
+  checkIfCourseStarted(
+    cursoId: string,
+    userId: string,
+    faseId: string
+  ): Observable<{ started: boolean; startTime: string }> {
+    return this.http.get<{ started: boolean; startTime: string }>(
+      `${this.obtenerdatos}/check-started/${cursoId}/${userId}/${faseId}`
+    );
+  }
+
+  getCursosByEmail(userEmail: string) {
+    return this.http.get(
+      `${this.baseCurso}/mis_cursos_creados?userEmail=${userEmail}`
+    );
+  }
+
+  getAllCursos() {
+    return this.http.get(`${this.baseCurso}/mis_cursos_creados`);
+  }
+
+  updateCursoEstado(cursoId: string, estado: boolean) {
+    const url = `http://localhost:3000/cursos/${cursoId}/estado`;
+    return this.http.put(url, { estado });
+  }
 }

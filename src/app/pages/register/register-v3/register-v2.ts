@@ -1,21 +1,19 @@
-// register-v2.component.ts
-
-import { Component, OnDestroy, Renderer2 } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { AppSettings } from '../../../service/app-settings.service';
-import { AuthService } from '../../../components/auth/auth.service';
+import { Component, OnDestroy, Renderer2 } from "@angular/core";
+import { Router } from "@angular/router";
+import { NgForm } from "@angular/forms";
+import { AppSettings } from "../../../service/app-settings.service";
+import { AuthService } from "../../../components/auth/auth.service";
 
 @Component({
-  selector: 'register-v2',
-  templateUrl: './register-v2.html'
+  selector: "register-v2",
+  templateUrl: "./register-v2.html",
 })
 export class RegisterV2Page implements OnDestroy {
-  userData = { name: '', lastname: '', email: '', reemail: '', password: '' };
+  userData = { name: "", lastname: "", email: "", reemail: "", password: "" };
   showPassword = false;
   showError = false;
   showSuccess = false;
-  alertMessage = '';
+  alertMessage = "";
 
   constructor(
     private router: Router,
@@ -24,46 +22,67 @@ export class RegisterV2Page implements OnDestroy {
     private authService: AuthService
   ) {
     this.appSettings.appEmpty = true;
-    this.renderer.addClass(document.body, 'bg-white');
+    this.renderer.addClass(document.body, "bg-white");
   }
 
   ngOnDestroy() {
     this.appSettings.appEmpty = false;
-    this.renderer.removeClass(document.body, 'bg-white');
+    this.renderer.removeClass(document.body, "bg-white");
   }
 
   formSubmit(f: NgForm) {
     const formData = f.value;
+    formData.name = this.sanitizeAndFormatName(formData.name);
+    formData.lastname = this.sanitizeAndFormatName(formData.lastname);
 
-    // Verificar si hay campos vacíos
-    if (!formData.name || !formData.lastname || !formData.email || !formData.reemail || !formData.password) {
-      this.showErrorAlert('Por favor, complete todos los campos.');
+    if (
+      !formData.name ||
+      !formData.lastname ||
+      !formData.email ||
+      !formData.reemail ||
+      !formData.password
+    ) {
+      this.showErrorAlert("Por favor, complete todos los campos.");
       return;
     }
 
     if (f.valid) {
       if (formData.email !== formData.reemail) {
-        this.showErrorAlert('Los correos no coinciden');
+        this.showErrorAlert("Los correos no coinciden");
         return;
       } else {
         if (!this.validarDominio(formData.email)) {
-          this.showErrorAlert('El correo debe ser de dominio @alu.unach.cl o @unach.cl');
+          this.showErrorAlert(
+            "El correo debe ser de dominio @alu.unach.cl o @unach.cl"
+          );
           return;
         } else {
-          const rol = formData.email.endsWith('@alu.unach.cl') ? 'estudiante' : 'docente';
+          const rol = formData.email.endsWith("@alu.unach.cl")
+            ? "estudiante"
+            : "docente";
 
-          this.authService.register(formData.name, formData.lastname, formData.email, formData.password, rol).subscribe(
-            response => {
-              this.showSuccessAlert('¡Te hemos enviado un correo para confirmar tu cuenta!');
-              setTimeout(() => {
-                this.router.navigate(['/login']);
-              }, 5000);
-            },
-            error => {
-              console.error('Error al registrar:', error);
-              this.showErrorAlert('Este correo ya está registrado.');
-            }
-          );
+          this.authService
+            .register(
+              formData.name,
+              formData.lastname,
+              formData.email,
+              formData.password,
+              rol
+            )
+            .subscribe(
+              (response) => {
+                this.showSuccessAlert(
+                  "¡Te hemos enviado un correo para confirmar tu cuenta!"
+                );
+                setTimeout(() => {
+                  this.router.navigate(["/login"]);
+                }, 5000);
+              },
+              (error) => {
+                console.error("Error al registrar:", error);
+                this.showErrorAlert("Este correo ya está registrado.");
+              }
+            );
         }
       }
     }
@@ -88,18 +107,23 @@ export class RegisterV2Page implements OnDestroy {
   hideAlerts() {
     this.showError = false;
     this.showSuccess = false;
-    this.alertMessage = '';
+    this.alertMessage = "";
   }
 
   validarDominio(email: string): boolean {
-    if (email && email.indexOf('@') !== -1) {
-      const domain = email.split('@')[1];
-      return domain === 'alu.unach.cl' || domain === 'unach.cl';
+    if (email && email.indexOf("@") !== -1) {
+      const domain = email.split("@")[1];
+      return domain === "alu.unach.cl" || domain === "unach.cl";
     }
     return false;
   }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  sanitizeAndFormatName(name: string): string {
+    let sanitized = name.replace(/[^a-zA-Z]/g, "");
+    return sanitized.charAt(0).toUpperCase() + sanitized.slice(1).toLowerCase();
   }
 }
